@@ -21,28 +21,26 @@ namespace WebsiteBaby3
             sqlOptions => sqlOptions.EnableRetryOnFailure()));
 
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-             .AddCookie(options =>
-             {
-                 var config = builder.Configuration.GetSection("Authentication:Cookie");
-                 options.LoginPath = config["LoginPath"];
-                 options.LogoutPath = config["LogoutPath"];
-                 options.AccessDeniedPath = config["AccessDeniedPath"];
-             })
-             .AddGoogle(options =>
-             {
-                 var googleConfig = builder.Configuration.GetSection("Authentication:Google");
-                 options.ClientId = googleConfig["ClientId"];
-                 options.ClientSecret = googleConfig["ClientSecret"];
-                 options.CallbackPath = "/signin-google";
-             })
-             .AddFacebook(options =>
-             {
-                 var facebookConfig = builder.Configuration.GetSection("Authentication:Facebook");
-                 options.AppId = facebookConfig["AppId"];
-                 options.AppSecret = facebookConfig["AppSecret"];
-                 options.CallbackPath = "/signin-facebook";
-                 options.SaveTokens = true;
-             });
+            .AddCookie(options =>
+            {
+                var config = builder.Configuration.GetSection("Authentication:Cookie");
+                options.LoginPath = config["LoginPath"];
+                options.LogoutPath = config["LogoutPath"];
+                options.AccessDeniedPath = config["AccessDeniedPath"];
+            })
+            .AddGoogle(options =>
+            {
+                options.ClientId = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_ID");
+                options.ClientSecret = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_SECRET");
+                options.CallbackPath = "/signin-google";
+            })
+            .AddFacebook(options =>
+            {
+                options.AppId = Environment.GetEnvironmentVariable("FACEBOOK_APP_ID");
+                options.AppSecret = Environment.GetEnvironmentVariable("FACEBOOK_APP_SECRET");
+                options.CallbackPath = "/signin-facebook";
+                options.SaveTokens = true;
+            });
 
             builder.Services.ConfigureApplicationCookie(options =>
             {
