@@ -28,16 +28,16 @@ namespace WebsiteBaby3
                 options.LogoutPath = config["LogoutPath"];
                 options.AccessDeniedPath = config["AccessDeniedPath"];
             })
-            .AddGoogle(options =>
+           .AddGoogle(options =>
             {
-                options.ClientId = builder.Configuration["Authentication:Google:ClientId"];
-                options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+                options.ClientId = builder.Configuration["Authentication_Google_ClientId"];
+                options.ClientSecret = builder.Configuration["Authentication_Google_ClientSecret"];
                 options.CallbackPath = "/signin-google";
             })
             .AddFacebook(options =>
             {
-                options.AppId = builder.Configuration["Authentication:Facebook:AppId"];
-                options.AppSecret = builder.Configuration["Authentication:Facebook:AppSecret"];
+                options.AppId = builder.Configuration["Authentication_Facebook_AppId"];
+                options.AppSecret = builder.Configuration["Authentication_Facebook_AppSecret"];
                 options.CallbackPath = "/signin-facebook";
                 options.SaveTokens = true;
             });
