@@ -30,14 +30,14 @@ namespace WebsiteBaby3
             })
             .AddGoogle(options =>
             {
-                options.ClientId = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_ID");
-                options.ClientSecret = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_SECRET");
+                options.ClientId = builder.Configuration["Authentication:Google:ClientId"];
+                options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
                 options.CallbackPath = "/signin-google";
             })
             .AddFacebook(options =>
             {
-                options.AppId = Environment.GetEnvironmentVariable("FACEBOOK_APP_ID");
-                options.AppSecret = Environment.GetEnvironmentVariable("FACEBOOK_APP_SECRET");
+                options.AppId = builder.Configuration["Authentication:Facebook:AppId"];
+                options.AppSecret = builder.Configuration["Authentication:Facebook:AppSecret"];
                 options.CallbackPath = "/signin-facebook";
                 options.SaveTokens = true;
             });
