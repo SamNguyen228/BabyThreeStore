@@ -1,0 +1,113 @@
+﻿@model WebsiteBaby3.ViewModels.ProductsDetailVM
+
+@{
+    ViewData["Title"] = "Chi Tiết Sản Phẩm";
+}
+
+<div class="container mt-4" data-aos="fade-up">
+    <div class="row">
+        <div class="col-md-5" data-aos="fade-right">
+            <div class="product-image">
+                <img src="@Model.HinhAnh" alt="@Model.TenSP" class="img-fluid rounded shadow-sm" />
+            </div>
+        </div>
+
+        <div class="col-md-7" data-aos="fade-left">
+            <div class="product-details">
+                <h2 class="product-title" data-aos="fade-up">@Model.TenSP</h2>
+                <p class="category" data-aos="fade-up"><strong>Loại sản phẩm:</strong> @Model.TenLoai</p>
+                <p class="price text-danger" data-aos="fade-up"><strong>Giá:</strong> @Model.Gia.ToString("N0") $</p>
+                <p class="stock @(Model.SoLuongTon > 0 ? "text-success" : "text-danger")" data-aos="fade-up">
+                    <strong>Tình trạng:</strong> @(Model.SoLuongTon > 0 ? "Còn " + Model.SoLuongTon + " Sản phẩm" : "Hết hàng")
+                </p>
+
+                <div class="rating" data-aos="fade-up">
+                    <strong>Đánh giá:</strong>
+                    @Html.Partial("PartialRating", Model.Reviews)
+                </div>
+
+                <p class="description mt-3" data-aos="fade-up">@Model.ChiTiet</p>
+
+                <div class="actions mt-4" data-aos="zoom-in">
+                    <form method="post" asp-action="AddToCart" asp-controller="Cart">
+                        <input type="hidden" name="id" value="@Model.MaSP" />
+
+                        <div class="quantity-control d-flex align-items-center" data-aos="zoom-in-up">
+                            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="decreaseQuantity()">-</button>
+                            <input type="number" id="quantity" name="quantity" value="1" min="1" max="@Model.SoLuongTon" class="form-control text-center mx-2" style="width: 60px;" />
+                            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="increaseQuantity()">+</button>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary mt-2" data-aos="zoom-in-up">
+                            <i class="fas fa-cart-plus"></i> Thêm vào giỏ hàng
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="product-description mt-5">
+    </div>
+</div>
+
+<!-- tab3  -->
+<!-- tab3 -->
+<div id="tab3" class="mt-4" data-aos="fade-up">
+    <div class="card shadow-sm border-1 rounded-lg" data-aos="fade-up">
+        <div class="card-header bg-primary text-white" data-aos="fade-down">
+            <h5 class="mb-0">Đánh giá sản phẩm</h5>
+        </div>
+        <div class="card-body">
+            <div class="row g-4">
+                <!-- Rating + Review List -->
+                @await Component.InvokeAsync("Review", new { productId = Model.MaSP })
+
+                <!-- Review Form -->
+                <div class="col-md-3" data-aos="zoom-in">
+                    @if (Model.DaMuaHang)
+                    {
+                        if (Model.ChoPhepDanhGia)
+                        {
+                            <div id="review-form" class="p-3 border rounded bg-light shadow-sm" data-aos="fade-left">
+                                <form class="review-form">
+                                    <input type="hidden" id="productId" value="@Model.MaSP" />
+                                    <input class="form-control mb-2" type="text" id="name" placeholder="Tên của bạn" required data-aos="fade-up" />
+                                    <input class="form-control mb-2" type="email" id="email" placeholder="Email của bạn" required data-aos="fade-up" />
+                                    <textarea class="form-control mb-2" id="review" placeholder="Nội dung đánh giá" required data-aos="fade-up"></textarea>
+
+                                    <div class="input-rating mb-2" data-aos="fade-up">
+                                        <div class="stars">
+                                            <input id="star5" name="rating" value="5" type="radio"><label for="star5"><i class="fa fa-star"></i></label>
+                                            <input id="star4" name="rating" value="4" type="radio"><label for="star4"><i class="fa fa-star"></i></label>
+                                            <input id="star3" name="rating" value="3" type="radio"><label for="star3"><i class="fa fa-star"></i></label>
+                                            <input id="star2" name="rating" value="2" type="radio"><label for="star2"><i class="fa fa-star"></i></label>
+                                            <input id="star1" name="rating" value="1" type="radio"><label for="star1"><i class="fa fa-star"></i></label>
+                                        </div>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary w-100" data-aos="fade-up">Gửi đánh giá</button>
+                                </form>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="alert alert-success" role="alert" data-aos="fade-right">
+                                Bạn đã đánh giá sản phẩm này. Mua thêm để được đánh giá tiếp.
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="alert alert-danger" role="alert" data-aos="fade-right">
+                            Bạn cần mua sản phẩm này để có thể đánh giá.
+                        </div>
+                    }
+                </div>
+                <!-- /Review Form -->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /tab3 -->
+<!-- /tab3  -->

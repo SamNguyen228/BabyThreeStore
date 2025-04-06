@@ -1,0 +1,181 @@
+﻿.card {
+    max-width: 94%;
+    margin: 0 auto;
+    margin-bottom: 20px;
+}
+
+.card-header {
+    padding: 10px 15px;
+}
+
+.card-body {
+    padding: 25px;
+}
+
+#review-form .stars label {
+    font-size: 1.4rem;
+    color: #ccc;
+    float: right;
+    padding: 0 5px;
+    cursor: pointer;
+}
+
+    #review-form .stars input[type="radio"]:checked ~ label,
+    #review-form .stars label:hover,
+    #review-form .stars label:hover ~ label {
+        color: #f39c12;
+    }
+
+.rating-avg span {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #f39c12;
+}
+
+.rating-stars i {
+    color: #f39c12;
+    margin-right: 2px;
+    font-size: 1.2rem;
+}
+
+.rating-progress {
+    background-color: #e0e0e0;
+    border-radius: 4px;
+    height: 8px;
+    width: 100%;
+    margin: 5px 0;
+}
+
+    .rating-progress > div {
+        height: 100%;
+        background-color: #f39c12;
+        border-radius: 4px;
+    }
+
+#reviews ul.reviews li {
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+}
+
+.review-heading h5 {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.review-heading .date {
+    color: #999;
+    font-size: 0.9rem;
+}
+
+#review-form .review-form {
+    background: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+#review-form .input {
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.input-rating .stars input[type="radio"] {
+    display: none;
+}
+
+.input-rating .stars label {
+    font-size: 1.4rem;
+    color: #ccc;
+    padding: 0 5px;
+    cursor: pointer;
+}
+
+.input-rating .stars input[type="radio"]:checked {
+    color: #f39c12;
+}
+
+    .input-rating .stars input[type="radio"]:checked + label,
+    .input-rating .stars input[type="radio"]:checked + label + label,
+    .input-rating .stars input[type="radio"]:checked + label + label + label,
+    .input-rating .stars input[type="radio"]:checked + label + label + label + label {
+        color: #f39c12;
+    }
+
+.input-rating .stars label:hover,
+.input-rating .stars label:hover ~ label {
+    color: #f39c12;
+}
+
+.cart-icon {
+    position: relative;
+    display: inline-block;
+}
+
+.cart-count {
+    position: absolute;
+    top: -5px;
+    right: -10px;
+    background: red;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+    text-align: center;
+    border-radius: 50%;
+}
+
+.table {
+    table-layout: fixed;
+    width: 100%;
+}
+
+    .table th, .table td {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+.col-name {
+    width: 5%;
+}
+
+.col-price {
+    width: 5%;
+    text-align: right;
+}
+
+.col-stock {
+    width: 10%;
+    text-align: center;
+}
+
+.col-image {
+    width: 10%;
+    text-align: center;
+}
+
+.col-description {
+    width: 5%;
+    white-space: normal;
+}
+
+.col-date {
+    width: 15%;
+    text-align: center;
+}
+
+.col-category {
+    width: 15%;
+    text-align: center;
+}
+
+.col-actions {
+    width: 30%;
+    text-align: center;
+}

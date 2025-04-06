@@ -1,0 +1,54 @@
+﻿@model WebsiteBaby3.Models.Promotion
+
+@{
+    ViewData["Title"] = "Chi tiết khuyến mãi";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+<main class="container mt-4">
+    <h2 class="text-center text-primary mb-4">Chi tiết khuyến mãi</h2>
+
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <!-- Thu nhỏ kích thước form -->
+            <div class="card shadow">
+                <div class="card-body">
+                    <h4 class="card-title text-center text-success">@Model.PromotionName</h4>
+                    <hr />
+
+                    <dl class="row">
+                        <dt class="col-sm-5">Tỷ lệ giảm giá (%)</dt>
+                        <dd class="col-sm-7">@Html.DisplayFor(model => model.DiscountPercentage)%</dd>
+
+                        <dt class="col-sm-5">Số tiền giảm ($)</dt>
+                        <dd class="col-sm-7">@Html.DisplayFor(model => model.DiscountAmount)</dd>
+
+                        <dt class="col-sm-5">Ngày bắt đầu</dt>
+                        <dd class="col-sm-7">@Model.StartDate.ToString("dd/MM/yyyy")</dd>
+
+                        <dt class="col-sm-5">Ngày kết thúc</dt>
+                        <dd class="col-sm-7">@Model.EndDate.ToString("dd/MM/yyyy")</dd>
+
+                        <dt class="col-sm-5">Giá trị đơn hàng tối thiểu ($)</dt>
+                        <dd class="col-sm-7">@Html.DisplayFor(model => model.MinOrderValue)</dd>
+
+                        <dt class="col-sm-5">Giảm giá tối đa ($)</dt>
+                        <dd class="col-sm-7">@Html.DisplayFor(model => model.MaxDiscount)</dd>
+
+                        <dt class="col-sm-5">Ngày tạo</dt>
+                        <dd class="col-sm-7">@Model.CreatedAt?.ToString("dd/MM/yyyy HH:mm")</dd>
+                    </dl>
+
+                    <div class="d-flex justify-content-between mt-4">
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Quay lại danh sách
+                        </a>
+                        <a asp-action="Edit" asp-route-id="@Model?.PromotionId" class="btn btn-primary">
+                            <i class="fas fa-edit"></i> Chỉnh sửa
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>

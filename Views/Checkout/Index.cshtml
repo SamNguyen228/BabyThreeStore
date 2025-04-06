@@ -1,0 +1,137 @@
+﻿@model WebsiteBaby3.ViewModels.CheckoutViewModel
+@{
+    double tongTien = Model.CartItems.Sum(item => item.Gia * item.SoLuong);
+    double shippingFee = tongTien >= 500 ? 0 : 25;
+}
+
+@{
+    ViewData["Title"] = "Thanh Toán";
+}
+
+<!-- Thêm AOS CSS -->
+<link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet" />
+
+@if (!Model.CartItems.Any())
+{
+    <div class="alert alert-warning text-center" data-aos="zoom-in">
+        <h4>Giỏ hàng của bạn đang trống. Vui lòng thêm sản phẩm trước khi thanh toán.</h4>
+    </div>
+}
+else
+{
+    <!-- SECTION -->
+    <div class="section py-5">
+        <div class="container">
+            <div class="row">
+                <form asp-action="ProcessOrder" method="post" id="checkoutForm" class="row g-4">
+                    <!-- Địa chỉ thanh toán -->
+                    <div class="col-md-6 col-lg-5" data-aos="fade-right">
+                        <div class="card shadow-sm">
+                            <div class="card-header bg-primary text-white">
+                                <h5 class="mb-0">Địa Chỉ Thanh Toán</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group mb-3">
+                                    <input class="form-control" id="fullName" asp-for="FullName" placeholder="Họ & Tên" readonly>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <input class="form-control" id="email" asp-for="Email" placeholder="Email" readonly>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <input class="form-control" id="address" asp-for="Address" placeholder="Chưa có địa chỉ giao hàng">
+                                </div>
+                                <div class="form-group mb-3">
+                                    <input class="form-control" id="phone" asp-for="Phone" placeholder="Số Điện Thoại" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Thông tin đơn hàng -->
+                    <div class="col-md-6 col-lg-7" data-aos="fade-left">
+                        <div class="card shadow-sm">
+                            <div class="card-header bg-info text-white">
+                                <h5 class="mb-0">Đơn Hàng Của Bạn</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive mb-4" data-aos="zoom-in">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 20%;"></th>
+                                                <th>TÊN SẢN PHẨM</th>
+                                                <th>GIÁ</th>
+                                                <th>SỐ LƯỢNG</th>
+                                                <th>TỔNG</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model.CartItems)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        <img src="@item.HinhAnh" width="50" height="50" alt="product image" class="img-fluid">
+                                                    </td>
+                                                    <td>@item.TenSP</td>
+                                                    <td>@item.Gia.ToString("C")</td>
+                                                    <td>@item.SoLuong</td>
+                                                    <td>$@(item.Gia * item.SoLuong)</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="coupon mb-3" data-aos="fade-up">
+                                    <input type="text" id="promoCode" class="form-control" placeholder="Nhập mã giảm giá">
+                                    <button type="button" class="btn btn-success mt-2" onclick="applyPromo()">Áp dụng</button>
+                                </div>
+
+                                <div class="order-summary" data-aos="fade-up" data-aos-delay="200">
+                                    <div class="d-flex justify-content-between">
+                                        <span>Giao Hàng</span>
+                                        <span><strong>@(shippingFee == 0 ? "Miễn Phí" : $"{shippingFee:C}")</strong></span>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <span>Giảm giá</span>
+                                        <span><strong id="discountAmount">- $0.00</strong></span>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <span><strong>Tổng cộng</strong></span>
+                                        <span><strong class="order-total" id="totalAmount">@($"{(tongTien + shippingFee):C}")</strong></span>
+                                    </div>
+                                </div>
+
+                                <div class="payment-method mt-3" data-aos="fade-up" data-aos-delay="400">
+                                    <div class="form-check">
+                                        <input type="radio" class="form-check-input" name="payment" id="payment-1">
+                                        <label class="form-check-label" for="payment-1">Chuyển khoản ngân hàng</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="radio" class="form-check-input" name="payment" id="payment-2">
+                                        <label class="form-check-label" for="payment-2">Thanh toán khi nhận hàng</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="radio" class="form-check-input" name="payment" id="payment-3">
+                                        <label class="form-check-label" for="payment-3">Hệ thống Paypal</label>
+                                    </div>
+                                </div>
+
+                                <div class="form-check mt-3" data-aos="fade-up" data-aos-delay="600">
+                                    <input type="checkbox" class="form-check-input" id="terms">
+                                    <label class="form-check-label" for="terms">Tôi đã đọc và đồng ý với <a href="#">điều khoản & điều kiện</a></label>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary w-100 mt-4" onclick="return validateForm()" data-aos="zoom-in" data-aos-delay="800">
+                                    Đặt Hàng
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- SECTION -->
+}
+

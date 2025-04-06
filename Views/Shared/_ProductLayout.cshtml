@@ -1,0 +1,590 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Basic -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!-- Mobile Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <!-- Site Metas -->
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <link rel="shortcut icon" href="~/images/favicon.png" type="image/x-icon">
+
+    <title>
+        @ViewData["Title"]
+    </title>
+
+    <!-- slider stylesheet -->
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
+
+    <!-- Thêm Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <!-- AOS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+
+    <!-- bootstrap core css -->
+    <link rel="stylesheet" type="text/css" href="~/css/bootstrap.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="~/css/style.css" rel="stylesheet" />
+    <!-- responsive style -->
+    <link href="~/css/responsive.css" rel="stylesheet" />
+    <link href="~/css/site.css" rel="stylesheet" />
+    <link href="~/css/product.css" rel="stylesheet" />
+
+    @if (TempData["AddSuccess"] != null)
+    {
+        <script>
+            window.onload = function () {
+                alert("@Html.Raw(TempData["AddSuccess"])");
+            };
+        </script>
+    }
+    @if (TempData["AddError"] != null)
+    {
+        <script>
+            window.onload = function () {
+                alert("@Html.Raw(TempData["AddError"])");
+            };
+        </script>
+    }
+</head>
+
+<body>
+    <div class="hero_area">
+        <!-- header section strats -->
+        <header class="header_section">
+            <nav class="navbar navbar-expand-lg custom_nav-container">
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index">
+                    <span>
+                        Cuddle Kingdom
+                    </span>
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class=""></span>
+                </button>
+
+                <div class="collapse navbar-collapse innerpage_navbar" id="navbarSupportedContent">
+                    <ul class="navbar-nav">
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Home" asp-action="Index">Trang Chủ <span class="sr-only">(current)</span></a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Product" asp-action="Index">
+                                    Sản Phẩm
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Home" asp-action="Contact">Liên Hệ</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="DashBoard" asp-controller="Home">Bảng Điều Khiển</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item ">
+                                <a class="nav-link" asp-controller="Home" asp-action="Index">Trang Chủ <span class="sr-only">(current)</span></a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Product" asp-action="Index">
+                                    Sản Phẩm
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Order" asp-action="OrderHistory">Lịch Sử</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Home" asp-action="Contact">Liên Hệ</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Cart" asp-action="Index">Giỏ Hàng</a>
+                            </li>
+                        }
+                    </ul>
+                    <div class="user_option">
+                        <ul class="navbar-nav" style="position: relative; z-index: 10;">
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fa fa-user"></i>
+                                        <span>@User.Identity.Name</span>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                        <li><a class="dropdown-item" href="@Url.Action("Profile", "Account")">👤 Xem thông tin</a></li>
+                                        <li><a class="dropdown-item" href="@Url.Action("EditProfile", "Account")">✏️ Chỉnh sửa hồ sơ</a></li>
+                                        <li>
+                                            <form method="post" asp-controller="Account" asp-action="Logout">
+                                                <button type="submit" class="dropdown-item">🚪 Đăng xuất</button>
+                                            </form>
+                                        </li>
+                                    </ul>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Account" asp-action="Login">
+                                        <i class="fa fa-sign-in"></i>
+                                        <span>Đăng Nhập</span>
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <!-- Notification -->
+                            <div style="position: relative;">
+                                <a href="#" id="notification-btn" style="position: relative; display: inline-block;" data-role="Admin">
+                                    <i class="fa fa-bell-o" style="font-size: 20px;"></i>
+                                    <div class="qty cart-count" id="notification-qty"
+                                         style="position: absolute; top: -5px; right: -5px; background: red; color: white; font-size: 12px; width: 18px; height: 18px; border-radius: 50%; text-align: center; line-height: 18px;">
+                                        0
+                                    </div>
+                                </a>
+                                <div id="notification-list" style="display:none; background:#fff; width: 380px; padding: 15px; position:absolute; top:40px; right:0px; border:1px solid #ccc; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                                    <div class="notification-header" style="font-weight:bold; margin-bottom:10px; font-size:16px;">Danh sách thông báo</div>
+                                    <div id="notification-content" style="max-height: 380px; overflow-y: auto;"></div>
+                                </div>
+                            </div>
+
+                            <!-- Dashboard button -->
+                            <div style="position: relative;">
+                                <a asp-action="DashBoard" asp-controller="Home" id="dashboard-btn">
+                                    <i class="fa-solid fa-gauge" style="font-size: 20px;"></i>
+                                </a>
+                            </div>
+                            <!-- /Notification -->
+                        }
+                        else
+                        {
+                            @await Component.InvokeAsync("Cart")
+                        }
+                        <form class="form-inline position-relative" method="get" action="@Url.Action("Index", "Product")" onsubmit="return submitSearch()">
+                            <button class="btn nav_search-btn" type="button" onclick="toggleSearch()">
+                                <i class="fa fa-search" aria-hidden="true"></i>
+                            </button>
+
+                            <!-- Ô nhập tìm kiếm -->
+                            <input type="text" id="searchBox" name="search" class="form-control position-absolute"
+                                   style="display: none; width: 200px; right: 50px; top: 5px; transition: 0.3s ease;"
+                                   placeholder="Nhập từ khóa..." value="@ViewBag.Search">
+                        </form>
+                    </div>
+                </div>
+            </nav>
+        </header>
+        <!-- end header section -->
+
+    </div>
+    <!-- end hero area -->
+
+    @RenderBody()
+
+    <!-- info section -->
+    <section class="info_section  layout_padding2-top" data-aos="fade-up">
+        <div class="social_container">
+            <div class="social_box">
+                <a href="#" data-aos="fade-up" data-aos-duration="1000">
+                    <i class="fa fa-facebook"></i>
+                </a>
+                <a href="#" data-aos="fade-down" data-aos-delay="200" data-aos-duration="1000">
+                    <i class="fa fa-twitter"></i>
+                </a>
+                <a href="#" data-aos="zoom-in" data-aos-delay="400" data-aos-duration="1000">
+                    <i class="fa fa-instagram"></i>
+                </a>
+                <a href="#" data-aos="flip-left" data-aos-delay="600" data-aos-duration="1000">
+                    <i class="fa fa-youtube"></i>
+                </a>
+            </div>
+        </div>
+        <div class="info_container">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-duration="1000">
+                        <h6>VỀ CHÚNG TÔI</h6>
+                        <p>Chúng tôi cam kết mang đến những sản phẩm an toàn, chất lượng và tiện lợi cho bạn...</p>
+                    </div>
+                    <div class="col-md-6 col-lg-3" data-aos="fade-right" data-aos-delay="200" data-aos-duration="1000">
+                        <div class="info_form">
+                            <h5>Đăng ký nhận tin</h5>
+                            <form action="#">
+                                <input type="email" placeholder="Nhập email của bạn">
+                                <button>Đăng ký</button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3" data-aos="fade-left" data-aos-delay="400" data-aos-duration="1000">
+                        <h6>CẦN HỖ TRỢ</h6>
+                        <p>Nếu bạn cần tư vấn hoặc hỗ trợ, hãy liên hệ với chúng tôi...</p>
+                    </div>
+                    <div class="col-md-6 col-lg-3" data-aos="zoom-in" data-aos-delay="600" data-aos-duration="1000">
+                        <h6>LIÊN HỆ CHÚNG TÔI</h6>
+                        <div class="info_link-box">
+                            <a href="#">
+                                <i class="fa fa-map-marker" aria-hidden="true"></i>
+                                <span>123 Đường Vạn Phúc, Hà Đông, Việt Nam</span>
+                            </a>
+                            <a href="#">
+                                <i class="fa fa-phone" aria-hidden="true"></i>
+                                <span>+84 123456789</span>
+                            </a>
+                            <a href="#">
+                                <i class="fa fa-envelope" aria-hidden="true"></i>
+                                <span>contact@demo.vn</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- footer section -->
+        <footer class="footer_section" data-aos="fade-up" data-aos-duration="1000">
+            <div class="container">
+                <p>
+                    &copy; <span id="displayYear"></span> All Rights Reserved 
+                </p>
+            </div>
+        </footer>
+        <!-- footer section -->
+    </section>
+    <!-- end info section -->
+
+    @RenderSection("Scripts", required: false)
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/jquery-3.4.1.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js">
+    </script>
+    <script src="js/custom.js"></script>
+
+    <!-- Tăng giảm số lượng sản phẩm ở giỏ hàng -->
+    <script>
+        $(document).ready(function () {
+            $(".quantity-input").on("change", function () {
+                var row = $(this).closest("tr");
+                var productId = row.data("id");
+                var newQuantity = $(this).val();
+
+                if (newQuantity < 1) {
+                    $(this).val(1);
+                    newQuantity = 1;
+                }
+
+                $.ajax({
+                    url: "/Cart/UpdateQuantity",
+                    type: "POST",
+                    data: { id: productId, quantity: newQuantity },
+                    success: function (response) {
+                        if (response.success) {
+                            // Cập nhật tổng tiền của từng sản phẩm
+                            var price = parseFloat(row.find(".price").data("price"));
+                            row.find(".total").text((price * newQuantity).toFixed(2));
+
+                            // Cập nhật tổng tiền giỏ hàng
+                            $("#cart-total").text(response.total);
+                        }
+                    },
+                    error: function () {
+                        alert("Cập nhật số lượng thất bại!");
+                    }
+                });
+            });
+        });
+    </script>
+
+    <!-- Thêm, bớt sản phẩm -->
+    <script>
+        function increaseQuantity() {
+            var quantityInput = document.getElementById('quantity');
+            var maxQuantity = parseInt(quantityInput.max);
+            var currentValue = parseInt(quantityInput.value);
+
+            if (currentValue < maxQuantity) {
+                quantityInput.value = currentValue + 1;
+            }
+        }
+
+        function decreaseQuantity() {
+            var quantityInput = document.getElementById('quantity');
+            var currentValue = parseInt(quantityInput.value);
+
+            if (currentValue > 1) {
+                quantityInput.value = currentValue - 1;
+            }
+        }
+    </script>
+
+    <!-- Tìm Kiếm -->
+    <script>
+        function toggleSearch() {
+            var searchBox = document.getElementById("searchBox");
+            if (searchBox.style.display === "none" || searchBox.style.display === "") {
+                searchBox.style.display = "block";
+                searchBox.focus();
+            } else {
+                searchBox.style.display = "none";
+            }
+        }
+
+        function submitSearch() {
+            var searchValue = document.getElementById("searchBox").value;
+            if (searchValue.trim() === "") {
+                alert("Vui lòng nhập từ khóa để tìm kiếm!");
+                return false;
+            }
+            return true;
+        }
+    </script>
+
+    <!-- Profile -->
+    <script>
+        document.getElementById("togglePassword").addEventListener("click", function () {
+            var passwordInput = document.getElementById("newPassword");
+            var icon = this.querySelector("i");
+
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                icon.classList.remove("bi-eye-slash");
+                icon.classList.add("bi-eye");
+            } else {
+                passwordInput.type = "password";
+                icon.classList.remove("bi-eye");
+                icon.classList.add("bi-eye-slash");
+            }
+        });
+    </script>
+
+    <!--Thanh Toán -->
+    <script>
+        document.getElementById("checkoutBtn").addEventListener("click", function () {
+            fetch('/checkout', { method: 'POST' }) // Gửi request đến Controller
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message); // Hiển thị thông báo
+                if (data.success) {
+                    window.location.href = "/home"; // Chuyển hướng về trang chủ
+                }
+            })
+            .catch(error => console.error("Lỗi:", error));
+        });
+    </script>
+
+    <!-- AOS Start -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script>
+        AOS.init(); // Khởi động AOS
+            AOS.init({
+            duration: 1000,
+            easing: "ease-in-out", 
+            once: true
+        });
+    </script>
+
+    <!-- Form Thanh Toán -->
+    <script>
+        function validateForm() {
+            let fullName = document.getElementById("fullName").value.trim();
+            let email = document.getElementById("email").value.trim();
+            let address = document.getElementById("address").value.trim();
+            let phone = document.getElementById("phone").value.trim();
+            let paymentMethods = document.getElementsByName("payment");
+            let termsChecked = document.getElementById("terms").checked;
+
+            // Kiểm tra Họ tên
+            if (fullName.length < 3) {
+                alert("Họ và tên phải có ít nhất 3 ký tự.");
+                return false;
+            }
+
+            // Kiểm tra Email
+            let emailPattern = /^[a-zA-Z0-9._%+-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            if (!email.match(emailPattern)) {
+                alert("Email không hợp lệ.");
+                return false;
+            }
+
+            // Kiểm tra Địa chỉ
+            if (address === "") {
+                alert("Địa chỉ không được để trống.");
+                return false;
+            }
+
+            // Kiểm tra Số điện thoại
+            let phonePattern = /^[0-9]{10,}$/;
+            if (!phone.match(phonePattern)) {
+                alert("Số điện thoại không hợp lệ. Phải có ít nhất 10 chữ số.");
+                return false;
+            }
+
+            // Kiểm tra phương thức thanh toán
+            let paymentSelected = false;
+            for (let i = 0; i < paymentMethods.length; i++) {
+                if (paymentMethods[i].checked) {
+                    paymentSelected = true;
+                    break;
+                }
+            }
+            if (!paymentSelected) {
+                alert("Vui lòng chọn phương thức thanh toán.");
+                return false;
+            }
+
+            // Kiểm tra đồng ý điều khoản
+            if (!termsChecked) {
+                alert("Bạn phải đồng ý với điều khoản & điều kiện.");
+                return false;
+            }
+
+            // Nếu mọi thứ hợp lệ, cho phép gửi form
+            return true;
+        }
+    </script>
+
+    <!-- Mã Khuyến Mãi -->
+    <script>
+        function applyPromo() {
+            let promoCode = document.getElementById("promoCode").value;
+            if (!promoCode) {
+                alert("Vui lòng nhập mã giảm giá!");
+                return;
+            }
+
+            fetch('/Checkout/ApplyPromotion?code=' + promoCode)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert("Áp dụng mã giảm giá thành công! Giảm: $" + data.discount);
+                        document.getElementById("discountAmount").innerText = "- $" + data.discount.toFixed(2);
+                        document.getElementById("totalAmount").innerText = "$" + data.totalAmount.toFixed(2);
+
+                        // ✅ Gán promotionId vào hidden input để gửi về server
+                        document.getElementById("promotionId").value = data.promotionId;
+                    } else {
+                        alert(data.message);
+                    }
+                });
+        }
+    </script>
+
+    <!-- Notification -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function loadNotifications() {
+            // Lấy vai trò của người dùng từ thuộc tính data-role của nút chuông
+            var role = $('#notification-btn').data('role');  // "Admin" hoặc "User"
+
+            // Thực hiện Ajax yêu cầu để tải thông báo tùy theo vai trò
+            $.ajax({
+                url: role === 'Admin' ? '/Order/GetAdminNotifications' : '/Order/GetUserNotifications',  // API tùy thuộc vào vai trò
+                method: 'GET',
+                success: function (response) {
+                    console.log("API Response: ", response); // Log response để kiểm tra dữ liệu trả về từ API
+
+                    // Nếu chưa đăng nhập
+                    if (response.message && response.message === "Bạn chưa đăng nhập.") {
+                        $('#notification-content').html('<div style="text-align:center; color:red;">Vui lòng đăng nhập để xem thông báo.</div>');
+                        $('#notification-qty').text(0); // Đặt số lượng thông báo là 0
+                        return;
+                    }
+
+                    // Cập nhật số lượng thông báo
+                    $('#notification-qty').text(response.count);
+
+                    let html = '';
+                    if (response.count > 0) {
+                        let index = 1;
+                        response.data.forEach(function (item) {
+                            html += `
+                            <div class="notification-item" style="padding: 10px; border-bottom: 1px solid #eee;">
+                                <div style="font-weight:bold;">${index++}. ${item.message}</div>
+                                <div style="color:#888; font-size: 12px; margin-top:5px;">${item.createdAt}</div>
+                            </div>`;
+                        });
+                    } else {
+                        // Nếu không có thông báo, hiển thị thông báo không có thông báo nào
+                        html = `<div style="text-align:center; color:#888;">Không có thông báo nào.</div>`;
+                    }
+                    $('#notification-content').html(html);
+                },
+                error: function (xhr, status, error) {
+                    console.log("API Error: ", xhr, status, error); // Log lỗi để kiểm tra chi tiết
+                    $('#notification-content').html('<div style="text-align:center; color:red;">Không thể tải thông báo.</div>');
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            loadNotifications();
+
+            // Bấm chuông mới toggle hiển thị danh sách
+            $('#notification-btn').click(function (e) {
+                e.preventDefault();
+                $('#notification-list').toggle();
+            });
+
+            // Optional: Tự động reload thông báo mỗi 30s (nếu cần)
+            // setInterval(loadNotifications, 30000);
+        });
+    </script>
+
+    <!-- Review -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $(".review-form").submit(function (event) {
+                event.preventDefault(); // Ngăn trang bị reload
+
+                var name = $("#name").val().trim();
+                var email = $("#email").val().trim();
+                var review = $("#review").val().trim();
+                var rating = $("input[name='rating']:checked").val();
+                var productId = $("#productId").val(); // Lấy ID sản phẩm từ input ẩn
+
+                // Kiểm tra dữ liệu đầu vào
+                if (!name || !email || !review) {
+                    alert("Vui lòng điền đầy đủ thông tin!");
+                    return;
+                }
+
+                if (!rating) {
+                    alert("Vui lòng chọn số sao đánh giá!");
+                    return;
+                }
+
+                $.ajax({
+                    url: "/api/reviews",
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        tenKhachHang: name,
+                        email: email,
+                        noiDung: review,
+                        danhGia: parseInt(rating),
+                        maSanPham: productId
+                    }),
+                    success: function (response) {
+                        alert("Cảm ơn bạn đã đánh giá! Đánh giá của bạn đã được ghi nhận.");
+                        location.reload(); // Làm mới trang để hiển thị đánh giá mới
+                    },
+                    error: function () {
+                        alert("Có lỗi xảy ra khi gửi đánh giá. Vui lòng thử lại sau.");
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

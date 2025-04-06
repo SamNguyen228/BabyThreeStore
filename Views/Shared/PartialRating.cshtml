@@ -1,0 +1,27 @@
+﻿@model IEnumerable<WebsiteBaby3.ViewModels.ReviewVM>
+
+@{
+    var totalReviews = Model.Count();
+    var averageRating = totalReviews > 0 ? Model.Average(r => r.danhGia) : 0;
+}
+
+<span>@averageRating.ToString("0.0")</span>
+
+<!-- Product Rating -->
+<div class="product-rating">
+    @for (int i = 1; i <= 5; i++)
+    {
+        if (i <= Math.Floor(averageRating))
+        {
+            <i class="fas fa-star text-warning"></i> <!-- Sao đầy -->
+        }
+        else if (i == Math.Ceiling(averageRating) && (averageRating % 1) >= 0.5)
+        {
+            <i class="fas fa-star-half-alt text-warning"></i> <!-- Sao nửa -->
+        }
+        else
+        {
+            <i class="far fa-star text-muted"></i> <!-- Sao rỗng -->
+        }
+    }
+</div>

@@ -1,0 +1,59 @@
+﻿@model WebsiteBaby3.Models.User
+
+@{
+    ViewData["Title"] = "Xóa Người Dùng";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+<div class="container d-flex justify-content-center">
+    <div class="card shadow p-4 w-100" style="max-width: 650px;">
+        <h2 class="mb-4 text-danger text-center">🗑️ Xóa Người Dùng</h2>
+        <div class="alert alert-warning">
+            <h5 class="text-danger"><i class="fa fa-exclamation-triangle"></i> Bạn có chắc chắn muốn xóa người dùng này?</h5>
+            <p class="mb-0"><strong>Lưu ý:</strong> Hành động này không thể hoàn tác!</p>
+        </div>
+
+        <div class="card-body">
+            <h5 class="text-primary mb-3"><i class="fa fa-user"></i> Thông Tin Người Dùng</h5>
+            <dl class="row">
+                <dt class="col-sm-4 fw-bold">Họ và Tên:</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.FullName)</dd>
+
+                <dt class="col-sm-4 fw-bold">Email:</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.Email)</dd>
+
+                <dt class="col-sm-4 fw-bold">Số Điện Thoại:</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.Phone)</dd>
+
+                <dt class="col-sm-4 fw-bold">Địa Chỉ:</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.Address)</dd>
+
+                <dt class="col-sm-4 fw-bold">Ngày Tạo:</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.CreatedAt)</dd>
+
+                <dt class="col-sm-4 fw-bold">Vai Trò:</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.Role.RoleName)</dd>
+            </dl>
+
+            <form asp-action="Delete" onsubmit="return confirmDelete();">
+                <input type="hidden" asp-for="UserId" />
+                <div class="d-flex justify-content-between mt-4">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fa fa-trash"></i> Xóa Người Dùng
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="fa fa-arrow-left"></i> Quay Lại
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function confirmDelete() {
+            return confirm("⚠️ Bạn có chắc chắn muốn xóa người dùng này? Hành động này KHÔNG thể hoàn tác!");
+        }
+    </script>
+}

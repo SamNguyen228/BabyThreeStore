@@ -1,0 +1,70 @@
+﻿@model WebsiteBaby3.Models.Order
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Đặt Hàng";
+}
+
+@if (TempData["Success"] != null)
+{
+    <script>
+        alert("@Html.Raw(TempData["Success"])");
+    </script>
+}
+
+<div class="container mt-4">
+    <h2 class="text-center text-success">🎉 Cảm ơn bạn đã đặt hàng! 🎉</h2>
+
+    <div class="card p-4 mt-3 shadow-lg">
+        <p><strong>Mã đơn hàng:</strong> #@Model.OrderId</p>
+        <p>
+            <strong>Trạng thái:</strong>
+            <span class="badge
+                bg-@(Model.Status == "Completed" ? "success" : Model.Status == "Pending" ? "warning" : "danger")
+                text-white fs-6 px-3 py-2 rounded-pill">
+                @Model.Status
+            </span>
+        </p>
+        <p><strong>Ngày đặt hàng:</strong> @Model.CreatedAt?.ToString("dd/MM/yyyy")</p>
+    </div>
+
+    <h3 class="mt-4 text-primary">🛒 Chi tiết đơn hàng:</h3>
+    <table class="table table-bordered table-hover table-responsive-sm mt-2">
+        <thead class="table-light">
+            <tr>
+                <th></th>
+                <th>Sản phẩm</th>
+                <th class="text-end">Giá</th>
+                <th class="text-center">Số lượng</th>
+                <th class="text-end">Tổng</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var detail in Model.OrderDetails)
+            {
+                <tr>
+                    <td><img src="@detail.Product.ImageUrl" width="70" height="70"/></td>
+                    <td>@detail.Product.ProductName</td>
+                    <td class="text-end">@detail.Price.ToString("C")</td>
+                    <td class="text-center">@detail.Quantity</td>
+                    <td class="text-end">@((detail.Price * detail.Quantity).ToString("C"))</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    @if (Model.DiscountAmount > 0)
+    {
+        <h5 class="text-end text-success">🎁 Giảm giá: -@Model.DiscountAmount?.ToString("C")</h5>
+    }
+
+    <h3 class="text-end text-danger mt-3 fs-4">💰 Tổng tiền: @Model.TotalAmount.ToString("C")</h3>
+
+    <div class="text-center mt-4">
+        <a asp-action="Index" asp-controller="Home" class="btn btn-primary btn-lg rounded-pill px-4 py-2">
+            <i class="bi bi-house-door"></i> Quay về trang chủ
+        </a>
+    </div>
+</div>
+
+

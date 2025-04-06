@@ -1,0 +1,94 @@
+﻿@model IEnumerable<WebsiteBaby3.ViewModels.ReviewVM>
+
+@{
+    var totalReviews = Model.Count();
+    var averageRating = totalReviews > 0 ? Model.Average(r => r.danhGia) : 0;
+    var starCounts = new int[5];
+
+    foreach (var review in Model)
+    {
+        if (review.danhGia >= 1 && review.danhGia <= 5)
+        {
+            starCounts[review.danhGia - 1]++;
+        }
+    }
+}
+
+<!-- Đánh giá trung bình -->
+<div class="col-md-3" style="padding-left: 20px; padding-right: 20px;">
+    <div id="rating">
+        <div class="rating-avg text-center mb-4">
+            <span>@averageRating.ToString("0.0")</span>
+            <div class="rating-stars mt-2">
+                @for (int i = 1; i <= 5; i++)
+                {
+                    if (i <= Math.Floor(averageRating))
+                    {
+                        <i class="fa fa-star"></i>
+                    }
+                    else if (i == Math.Ceiling(averageRating) && averageRating % 1 >= 0.5)
+                    {
+                        <i class="fa fa-star-half-o"></i>
+                    }
+                    else
+                    {
+                        <i class="fa fa-star-o"></i>
+                    }
+                }
+            </div>
+        </div>
+        <ul class="rating list-unstyled">
+            @for (int i = 5; i >= 1; i--)
+            {
+                var percentage = totalReviews > 0 ? ((double)starCounts[i - 1] / totalReviews) * 100 : 0;
+                <li class="mb-2 d-flex align-items-center">
+                    <div class="rating-stars mr-2">
+                        @for (int j = 1; j <= i; j++)
+                        {
+                            <i class="fa fa-star"></i>
+                        }
+                    </div>
+                    <div class="flex-grow-1 mx-2">
+                        <div class="rating-progress bg-light">
+                            <div class="bg-warning" style="width: @percentage%; height: 8px; border-radius: 4px;"></div>
+                        </div>
+                    </div>
+                    <span class="ml-2 font-weight-bold">@starCounts[i - 1]</span>
+                </li>
+            }
+        </ul>
+    </div>
+</div>
+
+<!-- Danh sách đánh giá -->
+<div class="col-md-6">
+    <div id="reviews">
+        <ul class="reviews list-unstyled" id="review-list">
+            @foreach (var item in Model)
+            {
+                <li class="mb-4 p-3 border rounded shadow-sm bg-white">
+                    <div class="review-heading mb-2">
+                        <h5 class="mb-1 font-weight-bold">@item.tenKhachHang</h5>
+                        <p class="text-muted mb-1"><small>@item.ngayDang</small></p>
+                        <div class="review-rating">
+                            @for (int i = 1; i <= 5; i++)
+                            {
+                                if (i <= item.danhGia)
+                                {
+                                    <i class="fa fa-star text-warning"></i>
+                                }
+                                else
+                                {
+                                    <i class="fa fa-star-o text-muted"></i>
+                                }
+                            }
+                        </div>
+                    </div>
+                    <div class="review-body">
+                        <p class="mb-0">@item.noiDung</p>
+                    </div>
+                </li>
+            }
+        </ul>
+    </div>
+</div>

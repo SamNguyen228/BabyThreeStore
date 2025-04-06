@@ -1,0 +1,68 @@
+﻿@model WebsiteBaby3.Models.User
+
+@{
+    ViewData["Title"] = "Chỉnh sửa hồ sơ";
+}
+
+<div class="container mt-4" data-aos="slide-up">
+    <div class="card shadow-lg p-4">
+        <h2 class="text-center mb-4">Chỉnh sửa hồ sơ</h2>
+
+        @if (ViewBag.Success != null)
+        {
+            <div class="alert alert-success text-center">
+                <i class="bi bi-check-circle"></i> @ViewBag.Success
+            </div>
+        }
+
+        <form asp-action="EditProfile" method="post">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label"><i class="bi bi-person"></i> Họ và tên</label>
+                        <input type="text" name="fullName" class="form-control" value="@Model.FullName" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label"><i class="bi bi-envelope"></i> Email</label>
+                        <input type="email" name="email" class="form-control" value="@Model.Email" required />
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label"><i class="bi bi-telephone"></i> Số điện thoại</label>
+                        <input type="text" name="phone" class="form-control" value="@Model.Phone" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label"><i class="bi bi-geo-alt"></i> Địa chỉ</label>
+                        <input type="text" name="address" class="form-control" value="@Model.Address" required />
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label"><i class="bi bi-key"></i> Mật khẩu mới (nếu đổi)</label>
+                <div class="input-group">
+                    <input type="password" id="newPassword" name="newPassword" class="form-control" placeholder="Để trống nếu không muốn đổi mật khẩu">
+                    <button type="button" class="btn btn-outline-secondary" id="togglePassword">
+                        <i class="bi bi-eye-slash"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-success">
+                    <i class="bi bi-save"></i> Lưu thay đổi
+                </button>
+                <a asp-action="Index" asp-controller="Home" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> Quay lại
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+<br />
+<br />
+

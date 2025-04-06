@@ -1,0 +1,8 @@
+﻿@model IEnumerable<WebsiteBaby3.ViewModels.ProductsVM>
+
+@{
+    ViewData["Title"] = "Sản Phẩm";
+    Layout = "_ProductList";
+}
+
+@await Html.PartialAsync("ProductItem", Model)

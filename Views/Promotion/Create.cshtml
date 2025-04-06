@@ -1,0 +1,74 @@
+﻿@model WebsiteBaby3.Models.Promotion
+
+@{
+    ViewData["Title"] = "Thêm khuyến mãi";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+<main class="container mt-4">
+    <h2 class="text-center text-primary mb-4">Thêm khuyến mãi mới</h2>
+
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <!-- Giảm kích thước form -->
+            <div class="card shadow">
+                <div class="card-body">
+                    <form asp-action="Create">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                        <div class="mb-3">
+                            <label asp-for="PromotionName" class="form-label fw-bold">Tên khuyến mãi</label>
+                            <input asp-for="PromotionName" class="form-control" placeholder="Nhập tên khuyến mãi" />
+                            <span asp-validation-for="PromotionName" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="DiscountPercentage" class="form-label fw-bold">Giảm giá (%)</label>
+                            <input asp-for="DiscountPercentage" class="form-control" type="number" step="0.01" placeholder="Nhập % giảm giá" />
+                            <span asp-validation-for="DiscountPercentage" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="DiscountAmount" class="form-label fw-bold">Giá trị giảm ($)</label>
+                            <input asp-for="DiscountAmount" class="form-control" type="number" step="0.01" placeholder="Nhập số tiền giảm" />
+                            <span asp-validation-for="DiscountAmount" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="StartDate" class="form-label fw-bold">Ngày bắt đầu</label>
+                            <input asp-for="StartDate" class="form-control" type="date" />
+                            <span asp-validation-for="StartDate" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="EndDate" class="form-label fw-bold">Ngày kết thúc</label>
+                            <input asp-for="EndDate" class="form-control" type="date" />
+                            <span asp-validation-for="EndDate" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="MinOrderValue" class="form-label fw-bold">Giá trị đơn tối thiểu ($)</label>
+                            <input asp-for="MinOrderValue" class="form-control" type="number" step="0.01" placeholder="Nhập giá trị tối thiểu" />
+                            <span asp-validation-for="MinOrderValue" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="MaxDiscount" class="form-label fw-bold">Giảm giá tối đa ($)</label>
+                            <input asp-for="MaxDiscount" class="form-control" type="number" step="0.01" placeholder="Nhập giảm giá tối đa" />
+                            <span asp-validation-for="MaxDiscount" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a asp-action="Index" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> Quay lại danh sách
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Lưu khuyến mãi
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>

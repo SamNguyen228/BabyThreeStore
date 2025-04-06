@@ -1,0 +1,50 @@
+﻿@model WebsiteBaby3.Models.Promotion
+
+@{
+    ViewData["Title"] = "Xóa khuyến mãi";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+<main class="container mt-4">
+    <h2 class="text-center text-danger mb-4">Xóa khuyến mãi</h2>
+
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <!-- Thu nhỏ form -->
+            <div class="card shadow">
+                <div class="card-body">
+                    <h4 class="card-title text-center text-warning">Bạn có chắc muốn xóa?</h4>
+                    <hr />
+
+                    <dl class="row">
+                        <dt class="col-sm-5">Tên khuyến mãi</dt>
+                        <dd class="col-sm-7">@Html.DisplayFor(model => model.PromotionName)</dd>
+
+                        <dt class="col-sm-5">Tỷ lệ giảm (%)</dt>
+                        <dd class="col-sm-7">@Html.DisplayFor(model => model.DiscountPercentage)%</dd>
+
+                        <dt class="col-sm-5">Số tiền giảm ($)</dt>
+                        <dd class="col-sm-7">@Html.DisplayFor(model => model.DiscountAmount)</dd>
+
+                        <dt class="col-sm-5">Ngày bắt đầu</dt>
+                        <dd class="col-sm-7">@Model.StartDate.ToString("dd/MM/yyyy")</dd>
+
+                        <dt class="col-sm-5">Ngày kết thúc</dt>
+                        <dd class="col-sm-7">@Model.EndDate.ToString("dd/MM/yyyy")</dd>
+                    </dl>
+
+                    <!-- Form xóa với cảnh báo -->
+                    <form asp-action="Delete" class="text-center mt-3" onsubmit="return confirm('Bạn có chắc muốn xóa khuyến mãi này?');">
+                        <input type="hidden" asp-for="PromotionId" />
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-trash"></i> Xóa
+                        </button>
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Quay lại
+                        </a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>

@@ -1,0 +1,511 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Basic -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!-- Mobile Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <!-- Site Metas -->
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <link rel="shortcut icon" href="images/favicon.png" type="image/x-icon">
+
+    <title>
+        @ViewData["Title"]
+    </title>
+
+    <!-- slider stylesheet -->
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
+
+    <!-- Thêm Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <!-- AOS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+
+    <!-- bootstrap core css -->
+    <link rel="stylesheet" type="text/css" href="~/css/bootstrap.css" />
+
+    <!-- Custom styles for this template -->
+    <link href="~/css/style.css" rel="stylesheet" />
+    <!-- responsive style -->
+    <link href="~/css/responsive.css" rel="stylesheet" />
+    <link href="~/css/site.css" rel="stylesheet" />
+    <style>
+        body {
+        overflow-x: hidden;
+        }
+
+        .cart-icon {
+        position: relative;
+        display: inline-block;
+        }
+
+        .cart-count {
+        position: absolute;
+        top: -5px;
+        right: -10px;
+        background: red;
+        color: white;
+        font-size: 12px;
+        font-weight: bold;
+        width: 18px;
+        height: 18px;
+        line-height: 18px;
+        text-align: center;
+        border-radius: 50%;
+        }
+    </style>
+
+    @if (TempData["AddSuccess"] != null)
+    {
+        <script>
+            window.onload = function () {
+                alert("@Html.Raw(TempData["AddSuccess"])");
+            };
+        </script>
+    }
+    @if (TempData["AddError"] != null)
+    {
+        <script>
+            window.onload = function () {
+                alert("@Html.Raw(TempData["AddError"])");
+            };
+        </script>
+    }
+</head>
+
+<body>
+    <div class="hero_area">
+        <!-- header section strats -->
+        <header class="header_section">
+            <nav class="navbar navbar-expand-lg custom_nav-container ">
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index">
+                    <span>
+                        Cuddle Kingdom
+                    </span>
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class=""></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav  ">
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Home" asp-action="Index">Trang Chủ <span class="sr-only">(current)</span></a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Product" asp-action="Index">
+                                    Sản Phẩm
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Home" asp-action="Contact">Liên Hệ</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="DashBoard" asp-controller="Home">Bảng Điều Khiển</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item ">
+                                <a class="nav-link" asp-controller="Home" asp-action="Index">Trang Chủ <span class="sr-only">(current)</span></a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Product" asp-action="Index">
+                                    Sản Phẩm
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Order" asp-action="OrderHistory">Lịch Sử</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Home" asp-action="Contact">Liên Hệ</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Cart" asp-action="Index">Giỏ Hàng</a>
+                            </li>
+                        }
+                    </ul>
+                    <div class="user_option">
+                        <ul class="navbar-nav">
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <li class="nav-item dropdown" style="z-index: 999">
+                                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fa fa-user"></i>
+                                        <span>@User.Identity.Name</span>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                        <li><a class="dropdown-item" href="@Url.Action("Profile", "Account")">👤 Xem thông tin</a></li>
+                                        <li><a class="dropdown-item" href="@Url.Action("EditProfile", "Account")">✏️ Chỉnh sửa hồ sơ</a></li>
+                                        <li>
+                                            <form method="post" asp-controller="Account" asp-action="Logout">
+                                                <button type="submit" class="dropdown-item">🚪 Đăng xuất</button>
+                                            </form>
+                                        </li>
+                                    </ul>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Account" asp-action="Login">
+                                        <i class="fa fa-sign-in"></i>
+                                        <span>Đăng Nhập</span>
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <!-- Notification -->
+                            <div style="position: relative;">
+                                <a href="#" id="notification-btn" style="position: relative; display: inline-block;" data-role="Admin">
+                                    <i class="fa fa-bell-o" style="font-size: 20px;"></i>
+                                    <div class="qty cart-count" id="notification-qty"
+                                    style="position: absolute; top: -5px; right: -5px; background: red; color: white; font-size: 12px; width: 18px; height: 18px; border-radius: 50%; text-align: center; line-height: 18px;">
+                                        0
+                                    </div>
+                                </a>
+                                <div id="notification-list" style="display:none; background:#fff; width: 300px; padding: 15px; position:absolute; top:40px; right:-25px; border:1px solid #ccc; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); z-index:999;">
+                                    <div class="notification-header" style="font-weight:bold; margin-bottom:10px; font-size:16px;">Danh sách thông báo</div>
+                                    <div id="notification-content" style="max-height: 300px; overflow-y: auto;"></div>
+                                </div>
+                            </div>
+
+                            <!-- Dashboard button -->
+                            <div style="position: relative;">
+                                <a asp-action="DashBoard" asp-controller="Home" id="dashboard-btn">
+                                    <i class="fa-solid fa-gauge" style="font-size: 20px;"></i>
+                                </a>
+                            </div>
+                            <!-- /Notification -->
+                        }
+                        else 
+                        {
+                            @await Component.InvokeAsync("Cart")
+                        }
+                        <form class="form-inline position-relative" method="get" action="@Url.Action("Index", "Product")" onsubmit="return submitSearch()">
+                            <button class="btn nav_search-btn" type="button" onclick="toggleSearch()">
+                                <i class="fa fa-search" aria-hidden="true"></i>
+                            </button>
+
+                            <!-- Ô nhập tìm kiếm -->
+                            <input type="text" id="searchBox" name="search" class="form-control position-absolute"
+                                   style="display: none; width: 200px; right: 50px; top: 5px; transition: 0.3s ease;"
+                                   placeholder="Nhập từ khóa..." value="@ViewBag.Search">
+                        </form>
+                    </div>
+                </div>
+            </nav>
+        </header>
+        <!-- end header section -->
+        <!-- slider section -->
+        <section class="slider_section" data-aos="fade-up">
+            <div class="slider_container">
+                <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-md-7">
+                                        <div class="detail-box">
+                                            <h1>
+                                                Chào mừng đến với <br>
+                                                Cuddle Kingdom
+                                            </h1>
+                                            <p>
+                                                Tại <b>Cuddle Kingdom</b>, chúng tôi mang đến những sản phẩm BB3 đáng yêu và chất lượng nhất
+                                                với mong muốn mang đến sự thoải mái và an toàn
+                                            </p>
+                                            <p>
+                                                💖 <b>Tận tâm - Chất lượng - An toàn</b> là phương châm hoạt động của chúng tôi. Hãy để
+                                                <b>Cuddle Kingdom</b> đồng hành cùng bạn!
+                                            </p>
+                                            <a asp-controller="Home" asp-action="Contact">
+                                                Liên hệ ngay
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5 ">
+                                        <div class="img-box">
+                                            <img src="~/images/slider-img.jpg" alt="Sản phẩm cho bé" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="carousel-item ">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-md-7">
+                                        <div class="detail-box">
+                                            <h1>
+                                                Chào mừng đến với <br>
+                                                Cuddle Kingdom
+                                            </h1>
+                                            <p>
+                                                Hãy khám phá bộ sưu tập đa dạng các sản phẩm Baby Three của chúng tôi và trải nghiệm dịch vụ tuyệt vời mà chúng tôi cung cấp. Chúng tôi hy vọng rằng bạn sẽ tìm thấy những sản phẩm yêu thích và trở thành một phần trong gia đình BB3.
+
+                                                Cảm ơn bạn đã ghé thăm và chúc bạn có những trải nghiệm mua sắm tuyệt vời!
+                                            </p>
+                                            <a asp-controller="Home" asp-action="Contact">
+                                                Liên Hệ Ngay
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5 ">
+                                        <div class="img-box">
+                                            <img src="~/images/slider-img.jpg" alt="" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="carousel-item ">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-md-7">
+                                        <div class="detail-box">
+                                            <h1>
+                                                Chào mừng đến với <br>
+                                                Cuddle Kingdom
+                                            </h1>
+                                            <p>
+                                                Chúng tôi tự hào là địa chỉ tin cậy mang đến cho ba mẹ những sản phẩm chất lượng nhất dành cho bạn.
+                                                Dù bạn đang tìm kiếm bất cứ sản phẩm BB3 nào,
+                                                <b>Cuddle Kingdom</b> luôn sẵn sàng phục vụ bạn!
+                                            </p>
+                                            <a href="">
+                                                Khám phá ngay
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5 ">
+                                        <div class="img-box">
+                                            <img src="~/images/slider-img.jpg" alt="Sản phẩm cho bé" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel_btn-box">
+                        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                            <i class="fa fa-arrow-left" aria-hidden="true"></i>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <img src="images/line.png" alt="" />
+                        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                            <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- end slider section -->
+    </div>
+    <!-- end hero area -->
+
+    @RenderBody()
+
+    <!-- info section -->
+    <section class="info_section  layout_padding2-top" data-aos="fade-up">
+        <div class="social_container">
+            <div class="social_box">
+                <a href="#" data-aos="fade-up" data-aos-duration="1000">
+                    <i class="fa fa-facebook"></i>
+                </a>
+                <a href="#" data-aos="fade-down" data-aos-delay="200" data-aos-duration="1000">
+                    <i class="fa fa-twitter"></i>
+                </a>
+                <a href="#" data-aos="zoom-in" data-aos-delay="400" data-aos-duration="1000">
+                    <i class="fa fa-instagram"></i>
+                </a>
+                <a href="#" data-aos="flip-left" data-aos-delay="600" data-aos-duration="1000">
+                    <i class="fa fa-youtube"></i>
+                </a>
+            </div>
+        </div>
+        <div class="info_container">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-duration="1000">
+                        <h6>VỀ CHÚNG TÔI</h6>
+                        <p>Chúng tôi cam kết mang đến những sản phẩm an toàn, chất lượng và tiện lợi cho bạn...</p>
+                    </div>
+                    <div class="col-md-6 col-lg-3" data-aos="fade-right" data-aos-delay="200" data-aos-duration="1000">
+                        <div class="info_form">
+                            <h5>Đăng ký nhận tin</h5>
+                            <form action="#">
+                                <input type="email" placeholder="Nhập email của bạn">
+                                <button>Đăng ký</button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3" data-aos="fade-left" data-aos-delay="400" data-aos-duration="1000">
+                        <h6>CẦN HỖ TRỢ</h6>
+                        <p>Nếu bạn cần tư vấn hoặc hỗ trợ, hãy liên hệ với chúng tôi...</p>
+                    </div>
+                    <div class="col-md-6 col-lg-3" data-aos="zoom-in" data-aos-delay="600" data-aos-duration="1000">
+                        <h6>LIÊN HỆ CHÚNG TÔI</h6>
+                        <div class="info_link-box">
+                            <a href="#">
+                                <i class="fa fa-map-marker" aria-hidden="true"></i>
+                                <span>123 Đường Vạn Phúc, Hà Đông, Việt Nam</span>
+                            </a>
+                            <a href="#">
+                                <i class="fa fa-phone" aria-hidden="true"></i>
+                                <span>+84 123456789</span>
+                            </a>
+                            <a href="#">
+                                <i class="fa fa-envelope" aria-hidden="true"></i>
+                                <span>contact@demo.vn</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- footer section -->
+        <footer class="footer_section" data-aos="fade-up" data-aos-duration="1000">
+            <div class="container">
+                <p>
+                    &copy; <span id="displayYear"></span> All Rights Reserved 
+                </p>
+            </div>
+        </footer>
+        <!-- footer section -->
+    </section>
+    <!-- end info section -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/jquery-3.4.1.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js">
+    </script>
+    <script src="js/custom.js"></script>
+
+    <!-- Tìm Kiếm -->
+    <script>
+        function toggleSearch() {
+            var searchBox = document.getElementById("searchBox");
+            if (searchBox.style.display === "none" || searchBox.style.display === "") {
+                searchBox.style.display = "block";
+                searchBox.focus();
+            } else {
+                searchBox.style.display = "none";
+            }
+        }
+
+        function submitSearch() {
+            var searchValue = document.getElementById("searchBox").value;
+            if (searchValue.trim() === "") {
+                alert("Vui lòng nhập từ khóa để tìm kiếm!");
+                return false;
+            }
+            return true;
+        }
+    </script>
+    <!-- Profile -->
+    <script>
+        document.getElementById("togglePassword").addEventListener("click", function () {
+            var passwordInput = document.getElementById("newPassword");
+            var icon = this.querySelector("i");
+
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                icon.classList.remove("bi-eye-slash");
+                icon.classList.add("bi-eye");
+            } else {
+                passwordInput.type = "password";
+                icon.classList.remove("bi-eye");
+                icon.classList.add("bi-eye-slash");
+            }
+        });
+    </script>
+
+    <!-- AOS Start -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script>
+        AOS.init(); // Khởi động AOS
+            AOS.init({
+            duration: 1000,
+            easing: "ease-in-out", 
+            once: true
+        });
+    </script>
+
+    <!-- Notification -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function loadNotifications() {
+            // Lấy vai trò của người dùng từ thuộc tính data-role của nút chuông
+            var role = $('#notification-btn').data('role');  // "Admin" hoặc "User"
+
+            // Thực hiện Ajax yêu cầu để tải thông báo tùy theo vai trò
+            $.ajax({
+                url: role === 'Admin' ? '/Order/GetAdminNotifications' : '/Order/GetUserNotifications',  // API tùy thuộc vào vai trò
+                method: 'GET',
+                success: function (response) {
+                    console.log("API Response: ", response); // Log response để kiểm tra dữ liệu trả về từ API
+
+                    // Nếu chưa đăng nhập
+                    if (response.message && response.message === "Bạn chưa đăng nhập.") {
+                        $('#notification-content').html('<div style="text-align:center; color:red;">Vui lòng đăng nhập để xem thông báo.</div>');
+                        $('#notification-qty').text(0); // Đặt số lượng thông báo là 0
+                        return;
+                    }
+
+                    // Cập nhật số lượng thông báo
+                    $('#notification-qty').text(response.count);
+
+                    let html = '';
+                    if (response.count > 0) {
+                        let index = 1;
+                        response.data.forEach(function (item) {
+                            html += `
+                            <div class="notification-item" style="padding: 10px; border-bottom: 1px solid #eee;">
+                                <div style="font-weight:bold;">${index++}. ${item.message}</div>
+                                <div style="color:#888; font-size: 12px; margin-top:5px;">${item.createdAt}</div>
+                            </div>`;
+                        });
+                    } else {
+                        // Nếu không có thông báo, hiển thị thông báo không có thông báo nào
+                        html = `<div style="text-align:center; color:#888;">Không có thông báo nào.</div>`;
+                    }
+                    $('#notification-content').html(html);
+                },
+                error: function (xhr, status, error) {
+                    console.log("API Error: ", xhr, status, error); // Log lỗi để kiểm tra chi tiết
+                    $('#notification-content').html('<div style="text-align:center; color:red;">Không thể tải thông báo.</div>');
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            loadNotifications();
+
+            // Bấm chuông mới toggle hiển thị danh sách
+            $('#notification-btn').click(function (e) {
+                e.preventDefault();
+                $('#notification-list').toggle();
+            });
+
+            // Optional: Tự động reload thông báo mỗi 30s (nếu cần)
+            // setInterval(loadNotifications, 30000);
+        });
+    </script>
+</body>
+</html>

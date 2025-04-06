@@ -1,0 +1,102 @@
+﻿@model IEnumerable<WebsiteBaby3.ViewModels.ProductsVM>
+
+<div class="container">
+    <!-- Form lọc sản phẩm -->
+    <form method="get" action="@Url.Action("Index", "Product")" class="d-flex flex-wrap justify-content-center align-items-center mb-3 gap-2" data-aos="fade-up">
+        <select name="sortOrder" class="form-control mx-2" style="width: 200px;" onchange="this.form.submit()">
+            <option value="">Sắp xếp theo</option>
+            <option value="price_asc" selected="@(ViewBag.SortOrder == "price_asc" ? "selected" : null)">Giá tăng dần</option>
+            <option value="price_desc" selected="@(ViewBag.SortOrder == "price_desc" ? "selected" : null)">Giá giảm dần</option>
+            <option value="category" selected="@(ViewBag.SortOrder == "category" ? "selected" : null)">Danh mục</option>
+        </select>
+
+        <select name="pageSize" class="form-control mx-2" style="width: 200px;" onchange="this.form.submit()">
+            <option value="4" selected="@(ViewBag.PageSize == 4 ? "selected" : null)">Hiển thị 4</option>
+            <option value="8" selected="@(ViewBag.PageSize == 8 ? "selected" : null)">Hiển thị 8</option>
+            <option value="12" selected="@(ViewBag.PageSize == 12 ? "selected" : null)">Hiển thị 12</option>
+        </select>
+
+        <input type="text" name="search" class="form-control mx-2" style="width: 250px;" placeholder="Nhập từ khóa..." value="@ViewBag.Search" />
+
+        <button type="submit" class="btn btn-primary mx-2" style="width: 100px;"><i class="fas fa-filter"></i> Lọc</button>
+    </form>
+
+    <!-- Hiển thị danh sách sản phẩm -->
+    <div class="row">
+        @{
+            var index = 0;
+        }
+        @foreach (var product in Model.Take(8))
+        {
+            <div class="col-sm-6 col-md-4 col-lg-3 mb-4" data-aos="fade-up" data-aos-delay="@((index + 1) * 100)">
+                @{
+                    index++;
+                }
+                <div class="box d-flex flex-column justify-content-between h-100 p-3 shadow-sm border rounded">
+                    <a asp-controller="Product" asp-action="Detail" asp-route-id="@product.MaSP">
+                        <div class="img-box text-center" data-aos="zoom-in">
+                            <img src="@product.HinhAnh" alt="@product.TenSP" class="img-fluid">
+                        </div>
+                        <div class="detail-box text-center mt-2" data-aos="fade-left">
+                            <h6 class="text-truncate" style="max-width: 100%;"> | @product.TenSP | </h6>
+                            <h6>
+                                Giá:
+                                <span class="text-danger">$@product.Gia.ToString("N0")</span>
+                            </h6>
+                        </div>
+                        <div class="new text-center" style="background-color: red; color: white" data-aos="flip-up">
+                            <span>Mới</span>
+                        </div>
+                    </a>
+
+                    <div class="mt-auto" data-aos="fade-up">
+                        <form method="post" asp-controller="Cart" asp-action="AddToCart">
+                            <input type="hidden" name="id" value="@product.MaSP" />
+                            <button type="submit" class="btn btn-primary btn-sm w-100">
+                                <i class="fas fa-cart-plus"></i> Thêm vào giỏ
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- Phân trang -->
+    @if (ViewBag.TotalPages > 1)
+    {
+        <nav class="mt-3" data-aos="fade-up">
+            <ul class="pagination justify-content-center">
+                <!-- Nút Previous -->
+                @if (ViewBag.CurrentPage > 1)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="@Url.Action("Index", new { loai = ViewBag.Loai, search = ViewBag.Search, sortOrder = ViewBag.SortOrder, page = ViewBag.CurrentPage - 1, pageSize = ViewBag.PageSize })">
+                            <i class="fas fa-chevron-left"></i> <!-- Icon Previous -->
+                        </a>
+                    </li>
+                }
+
+                <!-- Hiển thị số trang -->
+                @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                {
+                    <li class="page-item @(ViewBag.CurrentPage == i ? "active" : "")">
+                        <a class="page-link" href="@Url.Action("Index", new { loai = ViewBag.Loai, search = ViewBag.Search, sortOrder = ViewBag.SortOrder, page = i, pageSize = ViewBag.PageSize })">
+                            @i
+                        </a>
+                    </li>
+                }
+
+                <!-- Nút Next -->
+                @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="@Url.Action("Index", new { loai = ViewBag.Loai, search = ViewBag.Search, sortOrder = ViewBag.SortOrder, page = ViewBag.CurrentPage + 1, pageSize = ViewBag.PageSize })">
+                            <i class="fas fa-chevron-right"></i> <!-- Icon Next -->
+                        </a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    }
+</div>

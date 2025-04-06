@@ -1,0 +1,56 @@
+﻿@{
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+    ViewData["Title"] = "Đăng nhập";
+}
+
+<div class="background"></div>
+<div class="container mt-5">
+    <div class="form-container text-center">
+        <div class="icon-container">
+            <i class="fas fa-lock"></i> <!-- Lock icon -->
+        </div>
+        <h2>Đăng nhập</h2>
+        <form method="post" asp-action="Login" id="loginForm">
+            <div class="mb-3">
+                <input type="email" name="email" id="email" class="form-control" placeholder="Email..." required />
+                <span id="emailError" class="error-message"></span>
+            </div>
+
+            <div class="mb-3">
+                <input type="password" name="password" id="password" placeholder="Mật Khẩu..." class="form-control" required />
+                <span id="passwordError" class="error-message"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 button">Đăng nhập</button> <br> <br>
+            <a href="#" class="forgot-password">Quên mật khẩu?</a>
+        </form>
+
+        <div class="social-buttons mt-3">
+            <p>Hoặc đăng nhập bằng:</p>
+            <a asp-action="ExternalLogin" asp-route-provider="Facebook" class="social-button">
+                <i class="fab fa-facebook-f"></i>
+            </a>
+            <a asp-action="ExternalLogin" asp-route-provider="Google" class="social-button">
+                <i class="fab fa-google"></i>
+            </a>
+        </div>
+
+        @if (ViewBag.Error != null)
+        {
+            <div class="alert alert-danger">@ViewBag.Error</div>
+        }
+
+        <p class="mt-3">
+            Chưa có tài khoản? <a href="/Account/Register">Đăng ký ngay</a>
+        </p>
+
+        @if (TempData["RegisterSuccess"] != null)
+        {
+            <script>
+                window.onload = function () {
+                    alert("@Html.Raw(TempData["RegisterSuccess"])");
+                };
+            </script>
+        }
+    </div>
+</div>

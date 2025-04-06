@@ -1,0 +1,112 @@
+﻿@model IEnumerable<WebsiteBaby3.ViewModels.CartItem>
+@{
+    ViewData["Title"] = "Giỏ hàng của bạn";
+}
+
+<div class="container mt-4" data-aos="zoom-in">
+    <h2 class="text-center">🛒 Giỏ hàng của bạn</h2>
+
+    @if (Model == null || !Model.Any())
+    {
+        <div class="alert alert-warning text-center mt-4">
+            <p>Giỏ hàng của bạn đang trống! Hãy thêm sản phẩm vào giỏ hàng ngay.</p>
+            <a asp-controller="Product" asp-action="Index" class="btn btn-primary">Tiếp tục mua sắm</a>
+        </div>
+    }
+    else
+    {
+        <table class="table table-bordered mt-4">
+            <thead class="table-light">
+                <tr>
+                    <th>Hình ảnh</th>
+                    <th>Sản phẩm</th>
+                    <th>Giá</th>
+                    <th>Số lượng</th>
+                    <th>Thành tiền</th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="text-center">
+                            <img src="@item.HinhAnh" alt="@item.TenSP" class="img-thumbnail" style="width: 80px;">
+                        </td>
+                        <td>@item.TenSP</td>
+                        <td>@item.Gia.ToString("N0") $</td>
+                        <td>
+                            <form onsubmit="return updateQuantity(this);">
+                                <input type="hidden" name="id" value="@item.MaSP" />
+                                <input type="number" name="quantity" value="@item.SoLuong" min="1"
+                                       class="form-control text-center quantity-input"
+                                       style="width: 60px; display: inline-block;" />
+                                <button type="submit" class="btn btn-sm btn-success">Cập nhật</button>
+                            </form>
+                        </td>
+                        <td>@((item.Gia * item.SoLuong).ToString("N0")) $</td>
+                        <td>
+                            <form method="post" asp-action="RemoveCart" asp-controller="Cart">
+                                <input type="hidden" name="id" value="@item.MaSP" />
+                                <button type="submit" class="btn btn-danger btn-sm">🗑 Xóa</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="text-end">
+            <h4>
+                Tổng cộng: <strong class="text-danger">
+                    @Model.Sum(i => i.Gia * i.SoLuong).ToString("N0") $
+                </strong>
+            </h4>
+            <a href="@Url.Action("Index", "Checkout")" class="btn btn-lg btn-primary mt-3">
+                🛍 Tiến hành thanh toán
+            </a>
+        </div>
+        <div class="text-end" style="height: 80px;"></div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        function updateQuantity(form) {
+            const formData = new FormData(form);
+            const id = formData.get('id');
+            const quantity = formData.get('quantity');
+
+            fetch('/Cart/UpdateQuantity', {
+                method: 'POST',
+                body: formData
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    // Cập nhật lại dòng thành tiền
+                    const row = form.closest('tr');
+                    const priceCell = row.querySelector('td:nth-child(3)');
+                    const price = parseFloat(priceCell.textContent.replace('$', '').replace(',', ''));
+
+                    const thanhTienCell = row.querySelector('td:nth-child(5)');
+                    const thanhTien = price * quantity;
+                    thanhTienCell.textContent = thanhTien.toLocaleString() + ' $';
+
+                    // Cập nhật tổng tiền
+                    const totalElement = document.querySelector('.text-end strong.text-danger');
+                    totalElement.textContent = parseFloat(data.total).toLocaleString() + ' $';
+
+                    // Cập nhật số lượng trong icon giỏ hàng
+                    const cartCount = document.querySelector('.cart-count');
+                    if (cartCount) {
+                        cartCount.textContent = data.quantity;
+                    }
+                }
+            });
+
+            return false; // Ngăn form reload
+        }
+    </script>
+}
+

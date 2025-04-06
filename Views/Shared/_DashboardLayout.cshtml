@@ -1,0 +1,81 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>@ViewData["Title"] - Dashboard</title>
+    <!-- Bootstrap & FontAwesome -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- AOS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+    <style>
+        body {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: #343a40;
+            color: white;
+            padding: 20px;
+            position: fixed;
+            height: 100%;
+        }
+
+            .sidebar a {
+                color: white;
+                display: block;
+                padding: 10px;
+                text-decoration: none;
+            }
+
+                .sidebar a:hover {
+                    background: #495057;
+                    border-radius: 5px;
+                }
+
+        .content {
+            margin-left: 250px;
+            padding: 20px;
+            width: 100%;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>Dashboard</h2>
+        <a asp-controller="Home" asp-action="DashBoard"><i class="fa fa-home"></i> Trang chủ</a>
+        <a asp-controller="UserManage" asp-action="Index"><i class="fa fa-users"></i> Quản lý người dùng</a>
+        <a asp-controller="ProductManage" asp-action="Index"><i class="fa fa-box"></i> Quản lý sản phẩm</a>
+        <a asp-controller="Order" asp-action="Index"><i class="fa fa-shopping-cart"></i> Quản lý đơn hàng</a>
+        <a asp-controller="Promotion" asp-action="Index"><i class="fa fa-tags"></i> Quản lý khuyến mãi</a>
+        <a asp-controller="Report" asp-action="Index"><i class="fa fa-chart-line"></i> Theo dõi thống kê</a>
+        <a asp-controller="Home" asp-action="Index"><i class="fa fa-sign-out"></i> Đăng xuất</a>
+    </div>
+
+    <!-- Nội dung chính -->
+    <div class="content">
+        @RenderBody()
+    </div>
+
+    @RenderSection("Scripts", required: false)
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+    <!-- AOS Start -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script>
+        AOS.init(); // Khởi động AOS
+            AOS.init({
+            duration: 1500,
+            easing: "ease-in-out",
+            once: true
+        });
+    </script>
+</body>
+</html>

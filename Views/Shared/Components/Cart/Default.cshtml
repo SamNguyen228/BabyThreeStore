@@ -1,0 +1,19 @@
+﻿<a asp-controller="Cart" asp-action="Index" class="cart-icon">
+    <i class="fa fa-shopping-bag" aria-hidden="true"></i>
+    <span class="cart-count">@(Model ?? 0)</span>
+</a>
+
+<!-- Notification -->
+<div style="position: relative;">
+    <a href="#" id="notification-btn" style="position: relative; display: inline-block;">
+        <i class="fa fa-bell-o" style="font-size: 20px;"></i>
+        <div class="qty cart-count" id="notification-qty"
+             style="position: absolute; top: -5px; right: -5px; background: red; color: white; font-size: 12px; width: 18px; height: 18px; border-radius: 50%; text-align: center; line-height: 18px;">
+            0
+        </div>
+    </a>
+    <div id="notification-list" style="display:none; background:#fff; width: 380px; padding: 15px; position:absolute; top:40px; right:-25px; border:1px solid #ccc; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); z-index:999;">
+        <div class="notification-header" style="font-weight:bold; margin-bottom:10px; font-size:16px;">Danh sách thông báo</div>
+        <div id="notification-content" style="max-height: 380px; overflow-y: auto;"></div>
+    </div>
+</div>

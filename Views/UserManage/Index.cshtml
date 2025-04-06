@@ -1,0 +1,107 @@
+﻿@model IEnumerable<WebsiteBaby3.Models.User>
+
+@{
+    ViewData["Title"] = "Danh sách người dùng";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+<h2 class="mb-4">📋 Danh sách người dùng</h2>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <a asp-action="Create" class="btn btn-success">
+        <i class="fa fa-user-plus"></i> Thêm mới
+    </a>
+
+    <form method="get" class="d-flex">
+        <div class="input-group">
+            <input type="text" name="search" class="form-control" placeholder="Nhập Tên hoặc Email..." value="@ViewBag.Search">
+            <button type="submit" class="btn btn-outline-primary">
+                <i class="fa fa-search"></i>
+            </button>
+        </div>
+    </form>
+</div>
+
+<table class="table table-hover shadow-lg">
+    <thead class="table-primary text-center">
+        <tr>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.NameSort">
+                    Họ và tên <i class="fa @(ViewBag.CurrentSort == "name_asc" ? "fa-sort-alpha-down" : "fa-sort-alpha-up")"></i>
+                </a>
+            </th>
+            <th>Email</th>
+            <th>Số điện thoại</th>
+            <th>Địa chỉ</th>
+            <th>Ngày tạo</th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.RoleSort">
+                    Vai trò <i class="fa @(ViewBag.CurrentSort == "role_asc" ? "fa-sort-down" : "fa-sort-up")"></i>
+                </a>
+            </th>
+            <th>Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.FullName)</td>
+                <td>@Html.DisplayFor(modelItem => item.Email)</td>
+                <td>@Html.DisplayFor(modelItem => item.Phone)</td>
+                <td>@Html.DisplayFor(modelItem => item.Address)</td>
+                <td>@Html.DisplayFor(modelItem => item.CreatedAt)</td>
+                <td>@Html.DisplayFor(modelItem => item.Role.RoleName)</td>
+                <td class="text-center">
+                    <a asp-action="Edit" asp-route-id="@item.UserId" class="btn btn-primary btn-sm">
+                        <i class="fa fa-edit"></i>
+                    </a>
+                    <a asp-action="Details" asp-route-id="@item.UserId" class="btn btn-info btn-sm">
+                        <i class="fa fa-eye"></i>
+                    </a>
+                    <a asp-action="Delete" asp-route-id="@item.UserId" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc muốn xóa?');">
+                        <i class="fa fa-trash"></i>
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Phân trang -->
+@if (ViewBag.TotalPages > 1)
+{
+    <nav class="mt-3">
+        <ul class="pagination justify-content-center">
+            <!-- Nút Previous -->
+            @if (ViewBag.CurrentPage > 1)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action("Index", new { search = ViewBag.Search, sortOrder = ViewBag.CurrentSort, page = ViewBag.CurrentPage - 1, pageSize = ViewBag.PageSize })">
+                        <i class="fas fa-chevron-left"></i>
+                    </a>
+                </li>
+            }
+
+            <!-- Hiển thị số trang -->
+            @for (int i = 1; i <= ViewBag.TotalPages; i++)
+            {
+                <li class="page-item @(ViewBag.CurrentPage == i ? "active" : "")">
+                    <a class="page-link" href="@Url.Action("Index", new { search = ViewBag.Search, sortOrder = ViewBag.CurrentSort, page = i, pageSize = ViewBag.PageSize })">
+                        @i
+                    </a>
+                </li>
+            }
+
+            <!-- Nút Next -->
+            @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action("Index", new { search = ViewBag.Search, sortOrder = ViewBag.CurrentSort, page = ViewBag.CurrentPage + 1, pageSize = ViewBag.PageSize })">
+                        <i class="fas fa-chevron-right"></i>
+                    </a>
+                </li>
+            }
+        </ul>
+    </nav>
+}

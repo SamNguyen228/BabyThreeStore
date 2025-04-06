@@ -1,0 +1,50 @@
+﻿@model WebsiteBaby3.Models.Product
+
+@{
+    ViewData["Title"] = "Chi tiết sản phẩm";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+<h2 class="mb-4">Chi tiết Sản phẩm</h2>
+
+<div class="card shadow-lg p-4">
+    <div class="row">
+        <!-- Cột hiển thị hình ảnh sản phẩm -->
+        <div class="col-md-4 text-center">
+            <img src="@Model.ImageUrl" alt="@Model.ProductName" class="img-fluid rounded shadow" style="max-width: 100%; height: auto;">
+        </div>
+
+        <!-- Cột hiển thị thông tin sản phẩm -->
+        <div class="col-md-8">
+            <h4 class="text-primary">@Model.ProductName</h4>
+            <hr />
+
+            <dl class="row">
+                <dt class="col-sm-4">Giá:</dt>
+                <dd class="col-sm-8 text-danger fw-bold">@Model.Price.ToString("C0")</dd>
+
+                <dt class="col-sm-4">Số lượng tồn kho:</dt>
+                <dd class="col-sm-8">@Model.StockQuantity</dd>
+
+                <dt class="col-sm-4">Mô tả:</dt>
+                <dd class="col-sm-8">@Model.Description</dd>
+
+                <dt class="col-sm-4">Ngày tạo:</dt>
+                <dd class="col-sm-8">@Model.CreatedAt</dd>
+
+                <dt class="col-sm-4">Danh mục:</dt>
+                <dd class="col-sm-8">@Model.Category?.CategoryName</dd>
+            </dl>
+
+            <!-- Nút Hành Động -->
+            <div class="mt-4">
+                <a asp-action="Edit" asp-route-id="@Model.ProductId" class="btn btn-warning">
+                    <i class="fa fa-edit"></i> Chỉnh sửa
+                </a>
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="fa fa-arrow-left"></i> Quay lại danh sách
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

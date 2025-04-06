@@ -1,0 +1,133 @@
+﻿@model WebsiteBaby3.Models.Order
+@{
+    ViewData["Title"] = "Chi Tiết Đơn Hàng";
+}
+@{
+    string statusClass = Model.Status switch
+    {
+        "Pending" => "warning",
+        "Processing" => "primary",
+        "Shipped" => "info",
+        "Completed" => "success",
+        "Cancelled" => "danger",
+        _ => "secondary"
+    };
+
+    string statusText = Model.Status switch
+    {
+        "Pending" => "Chờ xác nhận",
+        "Processing" => "Đang xử lý",
+        "Shipped" => "Đang giao hàng",
+        "Completed" => "Hoàn thành",
+        "Cancelled" => "Đã hủy",
+        _ => "Không xác định"
+    };
+}
+<style>
+    .order-card {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        border-radius: 10px;
+        background-color: #ffffff;
+    }
+
+    .order-info p {
+        font-size: 1.1rem;
+    }
+
+    .badge {
+        font-size: 1rem;
+        padding: 0.5em 1em;
+        border-radius: 20px;
+    }
+
+    table th, table td {
+        vertical-align: middle !important;
+    }
+
+    table tbody tr:hover {
+        background-color: #f1f1f1;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-back, .btn-review {
+        transition: all 0.3s ease;
+    }
+
+        .btn-back:hover {
+            background-color: #495057;
+            color: #fff;
+        }
+
+        .btn-review:hover {
+            background-color: #198754;
+            color: #fff;
+        }
+</style>
+
+<br>
+<div class="container mt-4">
+    <h2 class="text-center text-primary" data-aos="zoom-in">
+        <i class="bi bi-receipt"></i> Chi Tiết Đơn Hàng #@Model.OrderId
+    </h2>
+
+    <div class="card p-4 mt-3 order-card" data-aos="slide-down">
+        <div class="order-info">
+            <p><i class="bi bi-calendar-event"></i> <strong>Ngày đặt:</strong> @Model.CreatedAt?.ToString("dd/MM/yyyy")</p>
+            <p><i class="bi bi-cash-stack"></i> <strong>Tổng tiền:</strong> @Model.TotalAmount.ToString("C")</p>
+            <p>
+                <i class="bi bi-info-circle"></i> <strong>Trạng thái:</strong>
+                <span class="badge bg-@statusClass">
+                    @statusText
+                </span>
+            </p>
+        </div>
+        <br>
+    </div>
+    <br>
+
+    <h3 class="mt-4" data-aos="zoom-in"><i class="bi bi-box-seam"></i> Danh Sách Sản Phẩm</h3>
+    <table class="table table-bordered table-hover mt-2" data-aos="slide-up">
+        <thead class="table-light">
+            <tr>
+                <th><i class="bi bi-image"></i> Hình Ảnh</th>
+                <th><i class="bi bi-bag"></i> Tên Sản Phẩm</th>
+                <th class="text-center"><i class="bi bi-hash"></i> Số Lượng</th>
+                <th class="text-end"><i class="bi bi-currency-dollar"></i> Giá</th>
+                <th class="text-end"><i class="bi bi-calculator"></i> Thành Tiền</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.OrderDetails)
+            {
+                <tr>
+                    <td><img src="@item.Product.ImageUrl" width="70" height="70" class="img-thumbnail table-img" alt="@item.Product.ProductName" /></td>
+                    <td>@item.Product.ProductName</td>
+                    <td class="text-center">@item.Quantity</td>
+                    <td class="text-end">@item.Price.ToString("C")</td>
+                    <td class="text-end">@((item.Price * item.Quantity).ToString("C"))</td>
+                </tr>
+                @if (Model.Status == "Completed")
+                {
+                    <tr>
+                        <td colspan="5" class="text-end" data-aos="zoom-in">
+                            <a href="@Url.Action("Detail", "Product", new { id = item.Product.ProductId })#tab3"
+                               class="btn btn-success">
+                                <i class="bi bi-star-fill"></i> Đánh Giá Ngay
+                            </a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+    <a asp-action="OrderHistory" class="btn btn-secondary mt-3 btn-back" data-aos="zoom-in">
+        <i class="bi bi-arrow-left-circle"></i> Quay Lại
+    </a>
+</div>
+<br>
+
+
+
+
+

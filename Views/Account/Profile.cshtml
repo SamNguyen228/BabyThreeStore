@@ -1,0 +1,32 @@
+﻿@model WebsiteBaby3.Models.User
+
+@{
+    ViewData["Title"] = "Hồ sơ cá nhân";
+}
+
+<div class="container mt-4" data-aos="slide-up">
+    <div class="card shadow-lg p-4">
+        <h2 class="text-center mb-4">Hồ sơ cá nhân</h2>
+
+        <div class="row">
+            <div class="col-md-6">
+                <p><strong>Họ và tên:</strong> @Model.FullName</p>
+                <p><strong>Email:</strong> @Model.Email</p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>Số điện thoại:</strong> @Model.Phone</p>
+                <p><strong>Địa chỉ:</strong> @Model.Address</p>
+            </div>
+        </div>
+
+        <div class="text-center mt-3">
+            <a asp-action="EditProfile" class="btn btn-primary">
+                <i class="bi bi-pencil"></i> Chỉnh sửa thông tin
+            </a>
+            <a asp-action="Index" asp-controller="Home" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Quay lại
+            </a>
+        </div>
+    </div>
+</div>
+<br> <br>

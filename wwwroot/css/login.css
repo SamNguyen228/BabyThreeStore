@@ -1,0 +1,215 @@
+﻿body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: white;
+}
+
+h1 {
+    margin-bottom: 20px;
+    color: #333;
+    font-size: 24px;
+}
+
+input[type="text"], input[type="email"], input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+.error-message {
+    color: red;
+    font-size: 12px;
+    margin-top: -10px;
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+.button {
+    background-color: #ff6f61;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+    .button:hover {
+        background-color: #ff4a3b;
+    }
+
+.forgot-password {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #007bff;
+    text-decoration: none;
+}
+
+    .forgot-password:hover {
+        text-decoration: underline;
+    }
+
+.social-buttons {
+    margin-top: 20px;
+}
+
+.social-button {
+    display: inline-block;
+    padding: 10px;
+    margin: 5px;
+    border-radius: 50%;
+    background: white;
+    color: #0084ff;
+    font-size: 20px;
+    text-align: center;
+}
+
+.icon-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+    .icon-container i {
+        font-size: 40px;
+        color: #ff6f61; /* Adjust color as needed */
+        margin-right: 10px;
+    }
+
+.background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('https://bizweb.dktcdn.net/100/467/909/products/z6224955403218-3bb2edb5d36a6d7ff8d773238a772074.jpg?v=1737210784940') no-repeat center center fixed;
+    background-size: cover;
+    filter: blur(0px); /* -1px không hợp lệ, nếu muốn mờ hãy dùng giá trị dương */
+    z-index: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-container {
+    background: rgba(255, 255, 255, 0.523);
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    width: 350px;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+}
+
+h1 {
+    margin-bottom: 20px;
+    color: #333;
+    font-size: 24px;
+}
+
+.icon-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+    .icon-container i {
+        font-size: 40px;
+        color: #ff6f61;
+        margin-right: 10px;
+    }
+
+input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+
+.submit-button {
+    background-color: #ff6f61;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+}
+
+    .submit-button:hover {
+        background-color: #ff4a3b;
+    }
+
+.back-link {
+    display: block;
+    margin-top: 15px;
+    text-decoration: none;
+    color: #007bff;
+    font-size: 14px;
+}
+
+    .back-link:hover {
+        text-decoration: underline;
+    }
+
+.error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
+    text-align: left;
+}
+
+.social-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    font-size: 20px;
+    color: white;
+    background-color: #ddd;
+    text-decoration: none;
+    transition: background-color 0.3s ease-in-out, transform 0.2s;
+}
+
+    .social-button i {
+        transition: color 0.3s ease-in-out;
+    }
+
+    .social-button[href*="Facebook"]:hover {
+        background-color: #1877F2;
+        transform: scale(1.1);
+    }
+
+    .social-button[href*="Google"]:hover {
+        background-color: #DB4437;
+        transform: scale(1.1);
+    }
+
+.table-hover tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.btn-sm {
+    transition: 0.3s;
+}
+
+    .btn-sm:hover {
+        transform: scale(1.05);
+    }

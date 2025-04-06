@@ -1,0 +1,45 @@
+﻿@model WebsiteBaby3.Models.User
+
+@{
+    ViewData["Title"] = "Thông Tin Người Dùng";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+<div class="container d-flex justify-content-center">
+    <div class="card shadow p-4 w-100" style="max-width: 600px;">
+        <h2 class="mb-3 text-center">👤 Thông Tin Người Dùng</h2>
+        <hr />
+
+        <div class="card-body">
+            <h5 class="card-title text-primary mb-3">📋 Chi Tiết Người Dùng</h5>
+            <dl class="row">
+                <dt class="col-4 fw-bold text-secondary">Họ và Tên</dt>
+                <dd class="col-8">@Html.DisplayFor(model => model.FullName)</dd>
+
+                <dt class="col-4 fw-bold text-secondary">Email</dt>
+                <dd class="col-8">@Html.DisplayFor(model => model.Email)</dd>
+
+                <dt class="col-4 fw-bold text-secondary">Số Điện Thoại</dt>
+                <dd class="col-8">@Html.DisplayFor(model => model.Phone)</dd>
+
+                <dt class="col-4 fw-bold text-secondary">Địa Chỉ</dt>
+                <dd class="col-8">@Html.DisplayFor(model => model.Address)</dd>
+
+                <dt class="col-4 fw-bold text-secondary">Ngày Tạo</dt>
+                <dd class="col-8">@Html.DisplayFor(model => model.CreatedAt)</dd>
+
+                <dt class="col-4 fw-bold text-secondary">Vai Trò</dt>
+                <dd class="col-8">@Html.DisplayFor(model => model.Role.RoleName)</dd>
+            </dl>
+
+            <div class="d-flex justify-content-between mt-4">
+                <a asp-action="Edit" asp-route-id="@Model.UserId" class="btn btn-warning">
+                    <i class="fa fa-edit"></i> Chỉnh Sửa
+                </a>
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="fa fa-arrow-left"></i> Quay Lại
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

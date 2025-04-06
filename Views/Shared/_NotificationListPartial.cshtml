@@ -1,0 +1,18 @@
+﻿@using WebsiteBaby3.Models
+@model List<Notification>
+
+@if (Model != null && Model.Any())
+{
+    <ul class="notification-list">
+        @foreach (var noti in Model)
+        {
+            <li class="@(noti.IsRead ? "" : "unread")">
+                @noti.Content - @noti.CreatedAt.ToString("dd/MM/yyyy HH:mm")
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <div class="no-notification">Không có thông báo nào.</div>
+}

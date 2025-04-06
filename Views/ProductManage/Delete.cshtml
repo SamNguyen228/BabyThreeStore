@@ -1,0 +1,52 @@
+﻿@model WebsiteBaby3.Models.Product
+
+@{
+    ViewData["Title"] = "Xóa sản phẩm";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+<h2 class="text-danger mb-4">⚠️ Xóa sản phẩm</h2>
+
+<div class="card shadow-lg border-danger p-4">
+    <div class="card-body">
+        <h4 class="text-danger">Bạn có chắc chắn muốn xóa sản phẩm này?</h4>
+        <hr />
+
+        <dl class="row">
+            <dt class="col-sm-3 fw-bold">Tên sản phẩm:</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.ProductName)</dd>
+
+            <dt class="col-sm-3 fw-bold">Giá:</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.Price) $</dd>
+
+            <dt class="col-sm-3 fw-bold">Số lượng tồn kho:</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.StockQuantity)</dd>
+
+            <dt class="col-sm-3 fw-bold">Hình ảnh:</dt>
+            <dd class="col-sm-9">
+                <img src="@Html.DisplayFor(model => model.ImageUrl)" alt="Ảnh sản phẩm" class="img-thumbnail" width="150" />
+            </dd>
+
+            <dt class="col-sm-3 fw-bold">Mô tả:</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.Description)</dd>
+
+            <dt class="col-sm-3 fw-bold">Ngày tạo:</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.CreatedAt)</dd>
+
+            <dt class="col-sm-3 fw-bold">Danh mục:</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.Category.CategoryName)</dd>
+        </dl>
+
+        <form asp-action="Delete">
+            <input type="hidden" asp-for="ProductId" />
+            <div class="text-center mt-4">
+                <button type="submit" class="btn btn-danger btn-lg">
+                    <i class="fa fa-trash"></i> Xóa sản phẩm
+                </button>
+                <a asp-action="Index" class="btn btn-secondary btn-lg">
+                    <i class="fa fa-arrow-left"></i> Quay lại danh sách
+                </a>
+            </div>
+        </form>
+    </div>
+</div>

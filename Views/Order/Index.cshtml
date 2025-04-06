@@ -1,0 +1,166 @@
+﻿@model IEnumerable<WebsiteBaby3.Models.Order>
+
+@{
+    ViewData["Title"] = "Quản Lý Đơn Hàng";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+@if (TempData["Error"] != null)
+{
+    <script>
+        alert("@Html.Raw(TempData["Error"])");
+    </script>
+}
+@if (TempData["UpdateSuccess"] != null)
+{
+    <script>
+        alert("@Html.Raw(TempData["UpdateSuccess"])");
+    </script>
+}
+
+<main class="container mt-4">
+    <h2 class="mb-4 text-center">Quản lý đơn hàng</h2>
+
+    <!-- Bộ lọc -->
+    <div class="card mb-4 shadow">
+        <div class="card-body">
+            <form method="get">
+                <div class="row align-items-center g-3">
+                    <!-- Ô tìm kiếm (Bên phải) -->
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <input type="text" name="searchTerm" class="form-control" placeholder="Tìm kiếm đơn hàng..." value="@ViewBag.SearchTerm" />
+                            <button type="submit" class="btn btn-outline-secondary">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Bộ lọc trạng thái -->
+                    <div class="col-md-3">
+                        <select name="status" class="form-select">
+                            <option value="">-- Chọn trạng thái --</option>
+                            <option value="Pending" selected="@(ViewBag.Status == "Pending")">Chờ xác nhận</option>
+                            <option value="Processing" selected="@(ViewBag.Status == "Processing")">Đang xử lý</option>
+                            <option value="Shipped" selected="@(ViewBag.Status == "Shipped")">Đã giao</option>
+                            <option value="Completed" selected="@(ViewBag.Status == "Completed")">Hoàn thành</option>
+                            <option value="Cancelled" selected="@(ViewBag.Status == "Cancelled")">Đã hủy</option>
+                        </select>
+                    </div>
+
+                    <!-- Bộ lọc theo ngày -->
+                    <div class="col-md-3">
+                        <input type="date" name="createdDate" class="form-control" value="@ViewBag.CreatedDate" />
+                    </div>
+
+                    <!-- Nút lọc -->
+                    <div class="col-md-2 d-flex align-items-center gap-2">
+                        <button type="submit" class="btn btn-primary w-auto">
+                            <i class="fas fa-filter"></i> Lọc
+                        </button>
+                        <a href="@Url.Action("Index")" class="btn btn-secondary">
+                            <i class="fas fa-sync-alt"></i>
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Danh sách đơn hàng -->
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h5>Danh sách đơn hàng</h5>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>ID</th>
+                        <th>Khách hàng</th>
+                        <th>Tổng giá</th>
+                        <th>Trạng thái</th>
+                        <th>Ngày tạo</th>
+                        <th>Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center text-muted">Không có đơn hàng nào</td>
+                        </tr>
+                    }
+                    else
+                    {
+                        @foreach (var order in Model)
+                        {
+                            string badgeClass = order.Status switch
+                            {
+                                "Pending" => "bg-secondary",
+                                "Processing" => "bg-primary",
+                                "Shipped" => "bg-info",
+                                "Completed" => "bg-success",
+                                "Cancelled" => "bg-danger",
+                                _ => "bg-warning"
+                            };
+
+                            string statusText = order.Status switch
+                            {
+                                "Pending" => "Chờ xác nhận",
+                                "Processing" => "Đang xử lý",
+                                "Shipped" => "Đã giao hàng",
+                                "Completed" => "Hoàn thành",
+                                "Cancelled" => "Đã hủy",
+                                _ => "Không xác định"
+                            };
+
+                            <tr>
+                                <td>#@order.OrderId</td>
+                                <td>@order.User.FullName</td>
+                                <td>@order.TotalAmount.ToString("C")</td>
+                                <td>
+                                    <span class="badge @badgeClass">@statusText</span>
+                                </td>
+                                <td>@order.CreatedAt?.ToString("dd/MM/yyyy")</td>
+                                <td>
+                                    <a href="@Url.Action("Details", "Order", new { id = order.OrderId })"
+                                       class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Phân trang -->
+    <div class="d-flex justify-content-center mt-3">
+        <nav>
+            <ul class="pagination">
+                @if (ViewBag.CurrentPage > 1)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="@Url.Action("Index", new { searchTerm = ViewBag.SearchTerm, status = ViewBag.Status, createdDate = ViewBag.CreatedDate, pageNumber = ViewBag.CurrentPage - 1, pageSize = ViewBag.PageSize })">«</a>
+                    </li>
+                }
+
+                @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                {
+                    <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                        <a class="page-link" href="@Url.Action("Index", new { searchTerm = ViewBag.SearchTerm, status = ViewBag.Status, createdDate = ViewBag.CreatedDate, pageNumber = i, pageSize = ViewBag.PageSize })">@i</a>
+                    </li>
+                }
+
+                @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="@Url.Action("Index", new { searchTerm = ViewBag.SearchTerm, status = ViewBag.Status, createdDate = ViewBag.CreatedDate, pageNumber = ViewBag.CurrentPage + 1, pageSize = ViewBag.PageSize })">»</a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    </div>
+</main>
+
