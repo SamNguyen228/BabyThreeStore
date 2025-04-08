@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Authentication.Facebook;
 using Microsoft.EntityFrameworkCore;
 using System.Configuration;
+using Microsoft.AspNetCore.Localization;
+using System.Globalization;
 using WebsiteBaby3.Models;
 
 namespace WebsiteBaby3
