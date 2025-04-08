@@ -67,6 +67,18 @@ namespace WebsiteBaby3
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
+             builder.Services.Configure<RequestLocalizationOptions>(options =>
+             {
+                 // Tạo danh sách các CultureInfo từ mảng string
+                 var supportedCultures = new[] { "en-US", "en-GB" }
+                     .Select(culture => new CultureInfo(culture))
+                     .ToList();
+            
+                 options.DefaultRequestCulture = new RequestCulture("en-US");
+                 options.SupportedCultures = supportedCultures;
+                 options.SupportedUICultures = supportedCultures;
+             });
+
             var app = builder.Build();
 
             using (var scope = app.Services.CreateScope())
@@ -93,6 +105,14 @@ namespace WebsiteBaby3
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+             // Cấu hình Localization Middleware
+             var localizationOptions = new RequestLocalizationOptions()
+                 .SetDefaultCulture("en-US")
+                 .AddSupportedCultures("en-US", "en-GB")
+                 .AddSupportedUICultures("en-US", "en-GB");
+            
+             app.UseRequestLocalization(localizationOptions);
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
