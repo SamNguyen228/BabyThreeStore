@@ -30,16 +30,18 @@ namespace WebsiteBaby3
                 options.LogoutPath = config["LogoutPath"];
                 options.AccessDeniedPath = config["AccessDeniedPath"];
             })
-           .AddGoogle(options =>
+            .AddGoogle(options =>
             {
-                options.ClientId = builder.Configuration["Authentication_Google_ClientId"];
-                options.ClientSecret = builder.Configuration["Authentication_Google_ClientSecret"];
+                // Lấy thông tin từ biến môi trường
+                options.ClientId = Environment.GetEnvironmentVariable("Authentication_Google_ClientId");
+                options.ClientSecret = Environment.GetEnvironmentVariable("Authentication_Google_ClientSecret");
                 options.CallbackPath = "/signin-google";
             })
             .AddFacebook(options =>
             {
-                options.AppId = builder.Configuration["Authentication_Facebook_AppId"];
-                options.AppSecret = builder.Configuration["Authentication_Facebook_AppSecret"];
+                // Lấy thông tin từ biến môi trường
+                options.AppId = Environment.GetEnvironmentVariable("Authentication_Facebook_AppId");
+                options.AppSecret = Environment.GetEnvironmentVariable("Authentication_Facebook_AppSecret");
                 options.CallbackPath = "/signin-facebook";
                 options.SaveTokens = true;
             });
