@@ -44,11 +44,6 @@ namespace WebsiteBaby3
                 options.SaveTokens = true;
             });
 
-            builder.Services.ConfigureApplicationCookie(options =>
-            {
-                options.Cookie.SameSite = SameSiteMode.None;
-            });
-
             // Cấu hình Authorization
             builder.Services.AddAuthorization(options =>
             {
@@ -80,6 +75,16 @@ namespace WebsiteBaby3
                  options.SupportedCultures = supportedCultures;
                  options.SupportedUICultures = supportedCultures;
              });
+
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll", policy =>
+                {
+                    policy.AllowAnyOrigin()
+                          .AllowAnyMethod()
+                          .AllowAnyHeader();
+                });
+            });
 
             var app = builder.Build();
 
