@@ -142,8 +142,7 @@
                         </td>
                     </tr>
                 }
-        
-                @if (Model.Status == "Pending")
+                else if (Model.Status == "Pending")
                 {
                     <tr>
                         <td colspan="5" class="text-end" data-aos="zoom-in">
