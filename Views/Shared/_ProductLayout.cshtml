@@ -586,5 +586,16 @@
             });
         });
     </script>
+
+    <!-- Mua lại -->
+     <script>
+         // JavaScript để chuyển hướng đến giỏ hàng khi nhấn nút Mua lại
+         document.getElementById("add-to-cart-form").onsubmit = function () {
+             let form = this;
+             setTimeout(function () {
+                 window.location.href = '@Url.Action("Index", "Cart")';
+             }, 500); 
+         };
+     </script>
 </body>
 </html>
