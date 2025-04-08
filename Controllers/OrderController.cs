@@ -84,49 +84,52 @@ namespace WebsiteBaby3.Controllers
             {
                 return NotFound();
             }
-
-            // Danh sách trạng thái theo thứ tự
+        
             var statusOrder = new List<string> { "Pending", "Processing", "Shipped", "Completed", "Cancelled" };
-
-            // Kiểm tra trạng thái hợp lệ
+        
             if (string.IsNullOrEmpty(status) || !statusOrder.Contains(status))
             {
                 TempData["Error"] = "Trạng thái đơn hàng không hợp lệ!";
                 return RedirectToAction("Index");
             }
-
+        
             int currentStatusIndex = statusOrder.IndexOf(order.Status);
             int newStatusIndex = statusOrder.IndexOf(status);
-
-            // ✅ Cho phép hủy ở bất kỳ thời điểm nào
+        
             if (status == "Cancelled")
             {
-                order.Status = status;
+                if (order.Status == "Pending")
+                {
+                    order.Status = "Cancelled";
+                }
+                else
+                {
+                    TempData["Error"] = "Chỉ được hủy đơn hàng khi trạng thái là 'Chờ xác nhận'!";
+                    return RedirectToAction("Index");
+                }
             }
-            // ✅ Chỉ cho phép cập nhật đúng trình tự (chỉ +1)
+        
             else if (newStatusIndex == currentStatusIndex + 1)
             {
-                // ✅ Nếu cập nhật sang "Processing" thì mới trừ số lượng tồn kho
                 if (status == "Processing")
                 {
                     var orderItems = await _context.OrderDetails
                         .Where(od => od.OrderId == orderId)
                         .ToListAsync();
-
+        
                     foreach (var item in orderItems)
                     {
                         var product = await _context.Products.FindAsync(item.ProductId);
                         if (product != null)
                         {
-                            // Trừ số lượng tồn kho
                             product.StockQuantity -= item.Quantity;
                             if (product.StockQuantity < 0) product.StockQuantity = 0;
-
+        
                             _context.Products.Update(product);
                         }
                     }
                 }
-
+        
                 order.Status = status;
             }
             else
@@ -134,13 +137,12 @@ namespace WebsiteBaby3.Controllers
                 TempData["Error"] = "Bạn chỉ được phép cập nhật theo đúng trình tự!";
                 return RedirectToAction("Index");
             }
-
-            // Cập nhật thời gian
+        
             order.UpdatedAt = DateTime.UtcNow;
-
+        
             _context.Orders.Update(order);
             await _context.SaveChangesAsync();
-
+        
             TempData["UpdateSuccess"] = "Cập nhật trạng thái đơn hàng thành công!";
             return RedirectToAction("Index");
         }
