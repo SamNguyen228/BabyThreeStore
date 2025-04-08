@@ -271,7 +271,33 @@ namespace WebsiteBaby3.Controllers
                 data = userNotifications
             });
         }
-
+        
+        [Authorize(Roles = "Customer")]
+        [HttpPost]
+        public IActionResult CancelOrder(int orderId)
+        {
+            var order = _context.Orders.SingleOrDefault(o => o.OrderId == orderId);
+        
+            if (order == null)
+            {
+                TempData["CancelError"] = "Đơn hàng không tồn tại!";
+                return RedirectToAction("Index");
+            }
+        
+            if (order.Status != "Pending")
+            {
+                TempData["CancelError"] = "Không thể hủy đơn hàng này. Đơn hàng đã được xử lý.";
+                return RedirectToAction("Index");
+            }
+        
+            // Hủy đơn hàng
+            order.Status = "Cancelled";
+            _context.SaveChanges();
+        
+            TempData["CancelSuccess"] = "Đơn hàng đã được hủy thành công!";
+            return RedirectToAction("OrderDetails");
+        }
+        
         private int GetUserId()
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
