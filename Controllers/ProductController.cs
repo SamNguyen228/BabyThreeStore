@@ -89,82 +89,85 @@ namespace WebsiteBaby3.Controllers
             return View(result);
         }
 
-        public IActionResult Detail(int id)
-        {
-            var data = db.Products
-                .Include(p => p.Category)
-                .SingleOrDefault(p => p.ProductId == id);
-
-            if (data == null)
-            {
-                TempData["Message"] = $"Không tìm thấy sản phẩm có mã {id}";
-                return RedirectToAction("/404");
-            }
-
-            var reviews = db.Reviews
-                .Where(r => r.ProductId == id)
-                .Select(r => new ReviewVM
-                {
-                    tenKhachHang = r.User.FullName,
-                    danhGia = r.Rating,
-                    ngayDang = r.CreatedAt,
-                    noiDung = r.ReviewText
-                })
-                .ToList();
-
-            bool daMuaHang = false;
-            bool choPhepDanhGia = false;
-
-            try
-            {
-                int userId = GetUserId();
-                int soLanMua = db.OrderDetails
-                    .Include(od => od.Order)
-                    .Where(od => od.ProductId == id
-                              && od.Order.UserId == userId
-                              && od.Order.Status.Trim().ToLower() == "completed")
-                    .Count();
-
-                int soLanDanhGia = db.Reviews
-                    .Where(r => r.ProductId == id && r.UserId == userId)
-                    .Count();
-
-                if (soLanMua > 0)
-                {
-                    daMuaHang = true;
-                    if (soLanMua > soLanDanhGia)
-                    {
-                        choPhepDanhGia = true;
-                    }
-                }
-            }
-            catch
-            {
-                daMuaHang = false;
-                choPhepDanhGia = false;
-            }
-
-            var result = new ProductsDetailVM
-            {
-                MaLoai = data.CategoryId,
-                MaSP = data.ProductId,
-                TenSP = data.ProductName,
-                HinhAnh = data.ImageUrl,
-                Gia = (double)data.Price,
-                MoTa = data.Description,
-                TenLoai = data.Category.CategoryName,
-                ChiTiet = data.Description ?? string.Empty,
-                DiemDanhGia = 5, 
-                SoLuongTon = data.StockQuantity,
-                SoLuong = data.StockQuantity,
-                Reviews = reviews,
-                DaMuaHang = daMuaHang,
-                ChoPhepDanhGia = choPhepDanhGia
-            };
-
-            return View(result);
-        }
-
+          public IActionResult Detail(int id)
+          {
+              var data = db.Products
+                  .Include(p => p.Category)
+                  .SingleOrDefault(p => p.ProductId == id);
+        
+              if (data == null)
+              {
+                  TempData["Message"] = $"Không tìm thấy sản phẩm có mã {id}";
+                  return RedirectToAction("/404");
+              }
+        
+              var reviews = db.Reviews
+                  .Where(r => r.ProductId == id)
+                  .Select(r => new ReviewVM
+                  {
+                      tenKhachHang = r.User.FullName,
+                      danhGia = r.Rating,
+                      ngayDang = r.CreatedAt,
+                      noiDung = r.ReviewText
+                  })
+                  .ToList();
+        
+              bool daMuaHang = false;
+              bool choPhepDanhGia = false;
+        
+              try
+              {
+                  int userId = GetUserId();
+                  int soLanMua = db.OrderDetails
+                      .Include(od => od.Order)
+                      .Where(od => od.ProductId == id
+                                && od.Order.UserId == userId
+                                && od.Order.Status.Trim().ToLower() == "completed")
+                      .Count();
+        
+                  int soLanDanhGia = db.Reviews
+                      .Where(r => r.ProductId == id && r.UserId == userId)
+                      .Count();
+        
+                  // Kiểm tra nếu đã mua ít nhất một lần
+                  if (soLanMua > 0)
+                  {
+                      daMuaHang = true;
+        
+                      // Nếu mua thêm và chưa đánh giá sản phẩm lần nào
+                      if (soLanMua > soLanDanhGia)
+                      {
+                          choPhepDanhGia = true;
+                      }
+                  }
+              }
+              catch
+              {
+                  daMuaHang = false;
+                  choPhepDanhGia = false;
+              }
+        
+              var result = new ProductsDetailVM
+              {
+                  MaLoai = data.CategoryId,
+                  MaSP = data.ProductId,
+                  TenSP = data.ProductName,
+                  HinhAnh = data.ImageUrl,
+                  Gia = (double)data.Price,
+                  MoTa = data.Description,
+                  TenLoai = data.Category.CategoryName,
+                  ChiTiet = data.Description ?? string.Empty,
+                  DiemDanhGia = 5,
+                  SoLuongTon = data.StockQuantity,
+                  SoLuong = data.StockQuantity,
+                  Reviews = reviews,
+                  DaMuaHang = daMuaHang,
+                  ChoPhepDanhGia = choPhepDanhGia
+              };
+        
+              return View(result);
+          }
+          
         private int GetUserId()
         {
             return int.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value);
