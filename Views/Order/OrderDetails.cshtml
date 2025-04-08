@@ -106,7 +106,7 @@
                     <td class="text-end">@item.Price.ToString("C")</td>
                     <td class="text-end">@((item.Price * item.Quantity).ToString("C"))</td>
                 </tr>
-                @if (Model.Status == "Completed")
+               @if (Model.Status == "Completed")
                 {
                     <tr>
                         <td colspan="5" class="text-end" data-aos="zoom-in">
@@ -114,6 +114,15 @@
                                class="btn btn-success">
                                 <i class="bi bi-star-fill"></i> Đánh Giá Ngay
                             </a>
+                
+                            <!-- Nút Mua lại -->
+                            <form action="@Url.Action("AddToCart", "Cart")" method="post" class="d-inline" id="add-to-cart-form">
+                                <input type="hidden" name="id" value="@item.ProductId" />
+                                <input type="hidden" name="quantity" value="1" />
+                                <button type="submit" class="btn btn-primary ms-2" id="buy-again-btn">
+                                    <i class="bi bi-cart-plus"></i> Mua lại
+                                </button>
+                            </form>
                         </td>
                     </tr>
                 }
